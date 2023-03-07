@@ -14,7 +14,7 @@ const auth = getAuth(firebaseApp)
 interface Uselogin {
   loginGoogle: () => void
   loginStatus: boolean
-  userLoginStatus: () => void
+  userLoginStatus: (logged: (res: boolean) => void) => void
 }
 
 export default function useLogin (): Uselogin {
@@ -33,14 +33,12 @@ export default function useLogin (): Uselogin {
       .then(isAdmin => {
         if (isAdmin) {
           setLoginStatus(true)
-          console.log('user logged succesfuly')
         } else {
           throw new Error('user has not access')
         }
       })
       .catch(e => {
         setLoginStatus(false)
-        console.log(e)
       })
   }
 
@@ -49,10 +47,12 @@ export default function useLogin (): Uselogin {
   //     return signInWithPopup(auth, provider)
   //   }
 
-  const userLoginStatus = (): void => {
+  const userLoginStatus = (logged: (res: boolean) => void): void => {
     onAuthStateChanged(auth, observerUser => {
       if (observerUser != null) {
-        console.log('se logeo un usuario...')
+        logged(true)
+      } else {
+        logged(false)
       }
     })
   }

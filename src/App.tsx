@@ -1,21 +1,32 @@
+import { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 
 import Login from './pages/login'
 import DashboardLayout from './layouts/dashboardlayout'
-import { UIprovider } from './context/UIcontext'
+import { useUIcontext } from './context/UIcontext'
+import useLogin from './hooks/useLogin'
 import './App.css'
 
 function App (): JSX.Element {
+  const { userLoggedIn } = useUIcontext()
+  const { userLoginStatus } = useLogin()
+
+  useEffect(() => {
+    userLoginStatus(loginStatus => {
+      if (loginStatus && userLoggedIn !== undefined) {
+        userLoggedIn()
+      }
+    })
+  }, [])
+
   return (
     <div className="App">
-      <UIprovider>
-        <Routes>
-          <Route path="/login" element={<Login/>}/>
+      <Routes>
+        <Route path="/login" element={<Login/>}/>
           <Route path="/" element={<DashboardLayout/>}>
             <Route index element={<h1>Home dashboard</h1>} />
           </Route>
         </Routes>
-      </UIprovider>
     </div>
   )
 }

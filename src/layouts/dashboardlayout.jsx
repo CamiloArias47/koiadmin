@@ -1,11 +1,11 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import Navbar from '../components/navbar'
-import useUser from '../hooks/useUser'
+import { useUIcontext } from '../context/UIcontext'
 
 export default function DashboardLayout () {
-  const user = useUser()
+  const { loggedin } = useUIcontext()
 
-  if (!user?.loggedin) return <Navigate to='/login' />
+  if (!loggedin) return <Navigate to='/login' />
 
   return (
     <>
