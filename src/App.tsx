@@ -1,11 +1,10 @@
 import { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 
-import Login from './pages/login'
+import Login from './pages/login/login'
 import DashboardLayout from './layouts/dashboardlayout'
 import { useUIcontext } from './context/UIcontext'
 import useLogin from './hooks/useLogin'
-import './App.css'
 
 function App (): JSX.Element {
   const { userLoggedIn } = useUIcontext()
