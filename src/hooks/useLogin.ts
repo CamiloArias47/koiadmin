@@ -22,21 +22,14 @@ export default function useLogin (): Uselogin {
 
   const isAdminUser = async (uid: string): Promise<boolean> => {
     const user = await getUser(uid)
-    return user.admin
+    // console.log({ user, admin: user.admin })
+    if (user.admin) return true
+    throw new Error('user has not access')
   }
 
   const loginGoogle = (): void => {
     const provider = new GoogleAuthProvider()
     signInWithPopup(auth, provider)
-      .then(userCredential => userCredential.user.uid)
-      .then(isAdminUser)
-      .then(isAdmin => {
-        if (isAdmin) {
-          setLoginStatus(true)
-        } else {
-          throw new Error('user has not access')
-        }
-      })
       .catch(e => {
         setLoginStatus(false)
       })
@@ -49,8 +42,15 @@ export default function useLogin (): Uselogin {
 
   const userLoginStatus = (logged: (res: boolean) => void): void => {
     onAuthStateChanged(auth, observerUser => {
+      console.log({ observerUser })
       if (observerUser != null) {
-        logged(true)
+        isAdminUser(observerUser.uid)
+          .then(() => { logged(true) })
+          .catch(() => {
+            // si entra aqui es porque la password estaba bien, pero no es admin, debemos decirle a google que lo deslogue
+            // para que inhabilite el token
+            logged(false)
+          })
       } else {
         logged(false)
       }
