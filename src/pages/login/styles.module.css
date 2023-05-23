@@ -1,6 +1,18 @@
 .main{
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    height: 100vh;
+    justify-content: center;
+}
+
+.login-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+}
+
+.title{
+    margin: 0;
 }
