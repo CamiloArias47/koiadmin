@@ -1,10 +1,18 @@
+
+.form{
+    padding: 12px;
+}
+
 .formInput{
     border-radius: 10px;
     border: 2px solid transparent;
     padding: 8px 0px;
     font-weight: 500;
+    font-size: 18px;
     outline: none;
     width: 100%;
+    height: 24px;
+    margin-bottom: 12px;
 }
 
 .formInput:focus-visible{
