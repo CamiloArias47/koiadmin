@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 
-import Login from './pages/login/login'
+import Login from './pages/login'
 import DashboardLayout from './layouts/dashboardlayout'
 import { useUIcontext } from './context/UIcontext'
 import useLogin from './hooks/useLogin'

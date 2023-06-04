@@ -5,7 +5,8 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   // FacebookAuthProvider
-  onAuthStateChanged
+  onAuthStateChanged,
+  signOut
 } from 'firebase/auth'
 import { getUser } from '../services/firestore/users'
 
@@ -15,6 +16,7 @@ interface Uselogin {
   loginGoogle: () => void
   loginStatus: boolean
   userLoginStatus: (logged: (res: boolean) => void) => void
+  logout: () => Promise<void>
 }
 
 export default function useLogin (): Uselogin {
@@ -22,7 +24,6 @@ export default function useLogin (): Uselogin {
 
   const isAdminUser = async (uid: string): Promise<boolean> => {
     const user = await getUser(uid)
-    // console.log({ user, admin: user.admin })
     if (user.admin) return true
     throw new Error('user has not access')
   }
@@ -42,13 +43,11 @@ export default function useLogin (): Uselogin {
 
   const userLoginStatus = (logged: (res: boolean) => void): void => {
     onAuthStateChanged(auth, observerUser => {
-      console.log({ observerUser })
       if (observerUser != null) {
         isAdminUser(observerUser.uid)
           .then(() => { logged(true) })
-          .catch(() => {
-            // si entra aqui es porque la password estaba bien, pero no es admin, debemos decirle a google que lo deslogue
-            // para que inhabilite el token
+          .catch(async () => {
+            await logout()
             logged(false)
           })
       } else {
@@ -57,7 +56,15 @@ export default function useLogin (): Uselogin {
     })
   }
 
+  const logout = async (): Promise<void> => {
+    const auth = getAuth()
+    await signOut(auth)
+  }
+
   return {
-    loginGoogle, loginStatus, userLoginStatus
+    loginGoogle,
+    loginStatus,
+    userLoginStatus,
+    logout
   }
 }

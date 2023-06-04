@@ -1,11 +1,12 @@
 import useLogin from '../../hooks/useLogin'
 import { useUIcontext } from '../../context/UIcontext'
 import { Navigate } from 'react-router-dom'
-import { formInput, form } from '../../styles'
+import { formInput, form, loginBtn, googleLoging } from '../../styles'
 import styles from './styles.module.css'
+import googleLogo from '../../imgs/logos/google.svg'
 
 export default function Login () {
-  const { loginGoogle, loginStatus } = useLogin()
+  const { loginGoogle } = useLogin()
   const { loggedin } = useUIcontext()
 
   if (loggedin) return <Navigate to='/' />
@@ -13,15 +14,15 @@ export default function Login () {
   return (
     <main className={styles.main}>
       <div className={styles['login-box']}>
-        <h1 className={styles.title}>Login page</h1>
+        <h1 className={styles.title}>Ingreso</h1>
         <form className={form}>
           <input type="email" name="email" id="email" placeholder="Email" className={formInput} required/>
           <input type="password" name="password" id="password" placeholder="Contraseña" className={formInput} required/>
+          <button type="submit" className={loginBtn}>Iniciar sesión</button>
         </form>
-        <button onClick={loginGoogle}>Iniciar sesión con Google</button>
-        {
-          loginStatus ? 'logeado' : 'no logged yet'
-        }
+        <button onClick={loginGoogle} className={googleLoging}>
+          Iniciar sesión <img src={googleLogo} alt="Iniciar sesión con Google"/>
+        </button>
       </div>
     </main>
   )

@@ -1,0 +1,8 @@
+.login-btn{
+ width: 100%;
+}
+
+.google-logging-btn{
+    display: flex;
+    align-items: center;
+}
