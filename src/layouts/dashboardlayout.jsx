@@ -10,7 +10,9 @@ export default function DashboardLayout () {
   return (
     <>
         <Navbar/>
-        <Outlet/>
+        <main>
+          <Outlet/>
+        </main>
     </>
   )
 }
