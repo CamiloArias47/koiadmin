@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 
 import Login from './pages/login'
-import DashboardLayout from './layouts/dashboardlayout'
+import DashboardLayout from './layouts/main/dashboardlayout'
 
 function App (): JSX.Element {
   return (

@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
-import Navbar from '../components/navbar'
-import useLogin from '../hooks/useLogin'
+import Navbar from '../../components/navbar'
+import useLogin from '../../hooks/useLogin'
+import styles from './dashboardlayout.module.css'
 
 export default function DashboardLayout () {
   const { redirectUserLoginStatus } = useLogin()
@@ -10,7 +11,7 @@ export default function DashboardLayout () {
   return (
     <>
         <Navbar/>
-        <main>
+        <main className={styles['main-frame']}>
           <Outlet/>
         </main>
     </>
