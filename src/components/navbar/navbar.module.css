@@ -4,6 +4,9 @@
     position: fixed;
     top: 0px;
     z-index: 20;
+    display: flex;
+    justify-content: center;
+    flex-flow: row wrap;
 }
 .navigation__list{
     display: flex;
@@ -13,9 +16,25 @@
     list-style-type: none;
     align-items: center;
     height: 64px;
+    width: 45%;
 }
 .navigation__item{
     padding: 0px 12px;
     font-size: 18px;
     font-weight: 600;
+}
+.navigation__right-block{
+    width: 45%;
+    display:flex;
+    flex-flow:row wrap;
+    align-items:center;
+    justify-content: right;
+}
+.sandwidch-btn{
+    display: block;
+    width: 32px;
+    margin: auto;
+    color: #0076ff;
+    transition: color .15s linear,transform .15s linear;  
+    margin: 0;
 }
