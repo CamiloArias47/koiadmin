@@ -1,15 +1,12 @@
 import useLogin from '../../hooks/useLogin'
-import { redirect } from 'react-router-dom'
 import { formInput, form, loginBtn, googleLoging } from '../../styles'
 import styles from './styles.module.css'
 import googleLogo from '../../imgs/logos/google.svg'
 
 export default function Login () {
-  const { loginGoogle, verifyIfUserIsLogged } = useLogin()
+  const { loginGoogle, redirectUserLoginStatus } = useLogin()
 
-  verifyIfUserIsLogged(() => {}, () => {
-    return redirect('/')
-  })
+  redirectUserLoginStatus()
 
   return (
     <main className={styles.main}>

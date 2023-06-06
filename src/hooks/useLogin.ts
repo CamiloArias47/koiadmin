@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { firebaseApp } from '../services/init-firebase'
-import { redirect } from 'react-router-dom'
+import { redirect, useNavigate } from 'react-router-dom'
 import {
   getAuth,
   GoogleAuthProvider,
@@ -18,7 +18,7 @@ interface Uselogin {
   loginStatus: boolean
   userLoginStatus: (logged: (res: boolean) => void) => void
   logout: () => Promise<void>
-  verifyIfUserIsLogged: (logged: () => void, noLogged: () => void) => void
+  redirectUserLoginStatus: (logged: string, noLogged: string) => void
 }
 
 export default function useLogin (): Uselogin {
@@ -58,11 +58,14 @@ export default function useLogin (): Uselogin {
     })
   }
 
-  const verifyIfUserIsLogged = (logged: () => void, noLogged: () => void): void => {
+  const redirectUserLoginStatus = (loggedRoute: string = '/', noLoggedRoute: string = '/login'): void => {
+    const navigate = useNavigate()
     useEffect(() => {
       userLoginStatus(loginStatus => {
-        if (loginStatus) logged()
-        else noLogged()
+        console.log({ loginStatus })
+        let goToUrl = noLoggedRoute
+        if (loginStatus) goToUrl = loggedRoute
+        navigate(goToUrl)
       })
     }, [])
   }
@@ -70,7 +73,6 @@ export default function useLogin (): Uselogin {
   const logout = async (): Promise<void> => {
     const auth = getAuth()
     signOut(auth).then(() => {
-      console.log('closing...')
       redirect('/login')
     }).catch((error) => {
       console.log({ error })
@@ -82,6 +84,6 @@ export default function useLogin (): Uselogin {
     loginStatus,
     userLoginStatus,
     logout,
-    verifyIfUserIsLogged
+    redirectUserLoginStatus
   }
 }
