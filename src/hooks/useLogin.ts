@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { firebaseApp } from '../services/init-firebase'
+import { redirect } from 'react-router-dom'
 import {
   getAuth,
   GoogleAuthProvider,
@@ -17,6 +18,7 @@ interface Uselogin {
   loginStatus: boolean
   userLoginStatus: (logged: (res: boolean) => void) => void
   logout: () => Promise<void>
+  verifyIfUserIsLogged: (logged: () => void, noLogged: () => void) => void
 }
 
 export default function useLogin (): Uselogin {
@@ -56,15 +58,30 @@ export default function useLogin (): Uselogin {
     })
   }
 
+  const verifyIfUserIsLogged = (logged: () => void, noLogged: () => void): void => {
+    useEffect(() => {
+      userLoginStatus(loginStatus => {
+        if (loginStatus) logged()
+        else noLogged()
+      })
+    }, [])
+  }
+
   const logout = async (): Promise<void> => {
     const auth = getAuth()
-    await signOut(auth)
+    signOut(auth).then(() => {
+      console.log('closing...')
+      redirect('/login')
+    }).catch((error) => {
+      console.log({ error })
+    })
   }
 
   return {
     loginGoogle,
     loginStatus,
     userLoginStatus,
-    logout
+    logout,
+    verifyIfUserIsLogged
   }
 }

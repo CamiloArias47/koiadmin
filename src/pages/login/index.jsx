@@ -1,15 +1,15 @@
 import useLogin from '../../hooks/useLogin'
-import { useUIcontext } from '../../context/UIcontext'
-import { Navigate } from 'react-router-dom'
+import { redirect } from 'react-router-dom'
 import { formInput, form, loginBtn, googleLoging } from '../../styles'
 import styles from './styles.module.css'
 import googleLogo from '../../imgs/logos/google.svg'
 
 export default function Login () {
-  const { loginGoogle } = useLogin()
-  const { loggedin } = useUIcontext()
+  const { loginGoogle, verifyIfUserIsLogged } = useLogin()
 
-  if (loggedin) return <Navigate to='/' />
+  verifyIfUserIsLogged(() => {}, () => {
+    return redirect('/')
+  })
 
   return (
     <main className={styles.main}>

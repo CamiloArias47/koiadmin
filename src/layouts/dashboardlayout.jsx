@@ -1,11 +1,13 @@
-import { Navigate, Outlet } from 'react-router-dom'
+import { Outlet, redirect } from 'react-router-dom'
 import Navbar from '../components/navbar'
-import { useUIcontext } from '../context/UIcontext'
+import useLogin from '../hooks/useLogin'
 
 export default function DashboardLayout () {
-  const { loggedin } = useUIcontext()
+  const { verifyIfUserIsLogged } = useLogin()
 
-  if (!loggedin) return <Navigate to='/login' />
+  verifyIfUserIsLogged(() => {}, () => {
+    return redirect('/login')
+  })
 
   return (
     <>
