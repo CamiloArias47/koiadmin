@@ -3,9 +3,10 @@ import { firebaseApp } from '../services/init-firebase'
 import { redirect, useNavigate } from 'react-router-dom'
 import {
   getAuth,
+  signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
-  // FacebookAuthProvider
+  FacebookAuthProvider,
   onAuthStateChanged,
   signOut
 } from 'firebase/auth'
@@ -15,10 +16,12 @@ const auth = getAuth(firebaseApp)
 
 interface Uselogin {
   loginGoogle: () => void
+  loginFacebook: () => void
   loginStatus: boolean
   userLoginStatus: (logged: (res: boolean) => void) => void
   logout: () => Promise<void>
   redirectUserLoginStatus: (logged: string, noLogged: string) => void
+  login: ({ email, password }: { email: string, password: string }) => Promise<any>
 }
 
 export default function useLogin (): Uselogin {
@@ -30,6 +33,19 @@ export default function useLogin (): Uselogin {
     throw new Error('user has not access')
   }
 
+  const login = async ({ email, password }: { email: string, password: string }): Promise<any> => {
+    return await signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user
+        console.log({ user })
+        return user
+      })
+      .catch(e => {
+        console.log({ e })
+        setLoginStatus(false)
+      })
+  }
+
   const loginGoogle = (): void => {
     const provider = new GoogleAuthProvider()
     signInWithPopup(auth, provider)
@@ -38,21 +54,29 @@ export default function useLogin (): Uselogin {
       })
   }
 
-  //   const loginFacebook = () =>{
-  //     const provider = new FacebookAuthProvider()
-  //     return signInWithPopup(auth, provider)
-  //   }
+  const loginFacebook = (): void => {
+    const provider = new FacebookAuthProvider()
+    signInWithPopup(auth, provider)
+      .catch(e => {
+        setLoginStatus(false)
+      })
+  }
 
   const userLoginStatus = (logged: (res: boolean) => void): void => {
     onAuthStateChanged(auth, observerUser => {
       if (observerUser != null) {
         isAdminUser(observerUser.uid)
-          .then(() => { logged(true) })
+          .then(() => {
+            setLoginStatus(true)
+            logged(true)
+          })
           .catch(async () => {
             await logout()
+            setLoginStatus(false)
             logged(false)
           })
       } else {
+        setLoginStatus(false)
         logged(false)
       }
     })
@@ -80,7 +104,9 @@ export default function useLogin (): Uselogin {
   }
 
   return {
+    login,
     loginGoogle,
+    loginFacebook,
     loginStatus,
     userLoginStatus,
     logout,
