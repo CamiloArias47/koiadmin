@@ -9,8 +9,8 @@ function App (): JSX.Element {
       <Routes>
         <Route path="/login" element={<Login/>}/>
         <Route path="/" element={<DashboardLayout/>}>
-          <Route index element={<h1>Home dashboard</h1>} />
-          <Route path='/products' element={<h1>productos</h1>} />
+          <Route index element={<h1>Home 🏡</h1>} />
+          <Route path='/products' element={<h1>productos 🛒</h1>} />
         </Route>
       </Routes>
     </div>

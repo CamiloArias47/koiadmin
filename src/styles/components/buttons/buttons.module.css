@@ -1,3 +1,15 @@
 .login-btn{
- width: 100%;
+  width: 100%;
+}
+.cancel-btn{
+  background-color: var(--color-error);
+  padding: 0px;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+}
+
+.cancel-btn:hover{
+    background-color: var(--color-error);
+    border: 1px solid transparent;
 }

@@ -6,7 +6,7 @@
 
 .formInput{
     border-radius: 10px;
-    border: 2px solid transparent;
+    border: 2px solid var(--color-primary);
     padding: 8px 0px;
     font-weight: 500;
     font-size: 18px;
@@ -14,6 +14,7 @@
     width: 99%;
     height: 24px;
     margin-bottom: 12px;
+    background-color: transparent;
 }
 
 .formInput:focus-visible{

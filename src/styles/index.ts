@@ -4,3 +4,4 @@ import buttons from './components/buttons/buttons.module.css'
 export const formInput = styleInputs.formInput
 export const form = styleInputs.form
 export const loginBtn = buttons['login-btn']
+export const cancelBtn = buttons['cancel-btn']

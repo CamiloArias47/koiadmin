@@ -41,6 +41,11 @@
     align-items: center;
 }
 
-.facebook-logging-img{
+.google-logging-btn{
+   margin-right: 6px;
+}
+
+.facebook-logging-img,
+.google-logging-img{
     width: 34px;
 }

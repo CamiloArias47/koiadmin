@@ -29,8 +29,8 @@ export default function Login () {
           <div className={styles['btns-container__text-info']}>
             o Inicia sesión con:
           </div>
-          <button onClick={loginGoogle} className={styles.googleLoging}>
-            <img src={googleLogo} alt="Iniciar sesión con Google"/>
+          <button onClick={loginGoogle} className={styles['google-logging-btn']}>
+            <img src={googleLogo} className={styles['google-logging-img']} alt="Iniciar sesión con Google"/>
           </button>
           <button onClick={loginFacebook} className={styles['facebook-logging-btn']}>
             <img src={facebookLogo} className={styles['facebook-logging-img']} alt="Iniciar sesión con Facebook"/>

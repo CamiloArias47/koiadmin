@@ -1,0 +1,43 @@
+.modal-window{
+    position: absolute;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #1c2631b3;
+    backdrop-filter: blur(2px);
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
+    overflow: hidden;
+    transition: opacity .2s linear;
+    z-index: 40;
+    scroll-snap-align: end;
+    justify-content: flex-end;
+}
+
+.modal{
+    position: relative;
+    overflow: hidden;
+    will-change: transform;
+    width: clamp(450px,30%,768px);
+    background: #ffffff;
+    border-radius: 5px 0 0 5px;
+}
+
+.modal__header{
+    width: 100%;
+    margin-bottom: 24px;
+    background-color: var(--color-secondary);
+    padding: 12px;
+}
+
+.close-icon{
+    color: var(--color-secondary);
+    width: 14px;
+}
+
+@media (min-width: 1920px){
+    .modal{
+        max-width: 33.3333333333%;
+    }
+}
