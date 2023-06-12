@@ -38,6 +38,14 @@ export default function Modal () {
     }, 300)
   }
 
+  /**
+   * Avoid to open modal after logout and then login again
+   */
+  const handlerLogout = () => {
+    updateShowModal()
+    logout()
+  }
+
   if (!showModal) return null
 
   return (
@@ -49,7 +57,7 @@ export default function Modal () {
           </button>
         </div>
         <div className={styles.modal__body}>
-          <button onClick={logout}>Cerrar sesión </button>
+          <button onClick={handlerLogout}>Cerrar sesión </button>
         </div>
       </div>
     </div>
