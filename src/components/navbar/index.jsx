@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom'
-import useLogin from '../../hooks/useLogin'
 import useUserInterfaceStore from '../../store/useUserInterface'
 import styles from './navbar.module.css'
 
 export default function Navbar () {
-  const { logout } = useLogin()
   const updateShowModal = useUserInterfaceStore(state => state.updateShowModal)
   return (
     <nav className={styles.navigation}>
@@ -16,7 +14,7 @@ export default function Navbar () {
               <Link to="/products">Productos</Link>
             </li>
             <li className={styles.navigation__item}>
-              <button onClick={logout}>Cerrar sesión</button>
+              sales
             </li>
         </ul>
         <div className={styles['navigation__right-block']}>
