@@ -1,0 +1,13 @@
+.menu__list{
+ padding-left: 0px;
+ margin: 0;
+ list-style-type: none;
+}
+
+.menu__item--active{
+    color: var(--color-text-primary);
+}
+
+.menu__list li{
+  padding-bottom: 6px;
+}

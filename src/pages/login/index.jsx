@@ -1,8 +1,8 @@
 import useLogin from '../../hooks/useLogin'
 import { formInput, form, loginBtn } from '../../styles'
 import styles from './styles.module.css'
-import googleLogo from '../../imgs/logos/google.svg'
-import facebookLogo from '../../imgs/logos/facebook.svg'
+import googleLogo from '../../assets/imgs/logos/google.svg'
+import facebookLogo from '../../assets/imgs/logos/facebook.svg'
 
 export default function Login () {
   const { loginGoogle, redirectUserLoginStatus, login, loginFacebook } = useLogin()

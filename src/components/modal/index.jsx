@@ -1,13 +1,14 @@
-import { useEffect } from 'react'
-import useLogin from '../../hooks/useLogin'
+import ModalLeftMenu from './menu'
 import { CloseIcon } from '../../icons'
 import { cancelBtn } from '../../styles'
 import useUserInterfaceStore from '../../store/useUserInterface'
 import styles from './modal.module.css'
 
 export default function Modal () {
-  const { logout } = useLogin()
-  const [showModal, updateShowModal] = useUserInterfaceStore(state => [state.showModal, state.updateShowModal])
+  const [
+    showModal,
+    updateShowModal
+  ] = useUserInterfaceStore(state => [state.showModal, state.updateShowModal])
 
   const openAnimation = open => {
     const windowModal = document.querySelector(`.${styles['modal-window']}`)
@@ -23,13 +24,11 @@ export default function Modal () {
     }
   }
 
-  useEffect(() => {
-    if (showModal) {
-      setTimeout(() => {
-        openAnimation(true)
-      }, 300)
-    }
-  }, [showModal])
+  if (showModal) {
+    setTimeout(() => {
+      openAnimation(true)
+    }, 300)
+  }
 
   const closeModal = () => {
     openAnimation(false)
@@ -38,15 +37,9 @@ export default function Modal () {
     }, 300)
   }
 
-  /**
-   * Avoid to open modal after logout and then login again
-   */
-  const handlerLogout = () => {
-    updateShowModal()
-    logout()
-  }
-
   if (!showModal) return null
+
+  const body = <ModalLeftMenu />
 
   return (
     <div className={styles['modal-window']}>
@@ -57,7 +50,7 @@ export default function Modal () {
           </button>
         </div>
         <div className={styles.modal__body}>
-          <button onClick={handlerLogout}>Cerrar sesión </button>
+          { body }
         </div>
       </div>
     </div>

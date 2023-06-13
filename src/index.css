@@ -20,6 +20,10 @@
   --color-text-primary: #393c3e;
   --color-text-dark-primary: rgba(255, 255, 255, 0.87); 
   --color-btn-primary: #0076ff;
+
+  --responsive-s: 320px;
+  --responsive-m: 768px;
+  --responsive-l: 1024px;
 }
 
 a {

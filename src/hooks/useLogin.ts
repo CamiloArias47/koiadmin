@@ -37,11 +37,9 @@ export default function useLogin (): Uselogin {
     return await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user
-        console.log({ user })
         return user
       })
       .catch(e => {
-        console.log({ e })
         setLoginStatus(false)
       })
   }
@@ -86,7 +84,6 @@ export default function useLogin (): Uselogin {
     const navigate = useNavigate()
     useEffect(() => {
       userLoginStatus(loginStatus => {
-        console.log({ loginStatus })
         let goToUrl = noLoggedRoute
         if (loginStatus) goToUrl = loggedRoute
         navigate(goToUrl)
