@@ -4,7 +4,7 @@
  list-style-type: none;
 }
 
-.menu__item--active{
+.menu__item--active a{
     color: var(--color-text-primary);
 }
 
