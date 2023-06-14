@@ -1,0 +1,27 @@
+.product-container{
+    display: flex;
+    flex-flow: row nowrap;
+    padding-top: 16px;
+    align-items: stretch;
+    column-gap: 24px;
+}
+
+.product-container__main{
+    width: 70%;
+}
+
+.product-container__header{
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
+
+.product-container__aux{
+    width: 30%;
+}
+
+.card{
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding: 12px;
+}

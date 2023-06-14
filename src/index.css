@@ -1,5 +1,5 @@
 :root {
-  font-family: system-ui, Arial;
+  font-family: venirNextW1G,Helvetica,Arial,sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -46,8 +46,9 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: 32px;
   line-height: 1.1;
+  margin: 0px;
 }
 
 button {
