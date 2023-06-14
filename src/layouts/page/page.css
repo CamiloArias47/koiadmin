@@ -1,0 +1,21 @@
+.page-container{
+    display: flex;
+    flex-flow: row nowrap;
+    padding-top: 16px;
+    align-items: stretch;
+    column-gap: 24px;
+}
+  
+.page-container__main{
+    width: 70%;
+}
+  
+.page-container__header{
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+}
+  
+.page-container__aux{
+    width: 30%;
+}

@@ -9,7 +9,9 @@ export default function Products (): JSX.Element {
         header={
           <>
             <h1>Productos</h1>
-            <Link to="/products/create">Agregar producto</Link>
+            <Link to="/products/create" className="button">
+              Agregar producto
+            </Link>
           </>
         }
         aux={

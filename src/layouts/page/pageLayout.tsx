@@ -1,3 +1,4 @@
+import './page.css'
 interface pageLayoutTypes {
   header?: JSX.Element | string
   body?: JSX.Element | string
