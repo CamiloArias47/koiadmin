@@ -72,6 +72,28 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.page-container{
+  display: flex;
+  flex-flow: row nowrap;
+  padding-top: 16px;
+  align-items: stretch;
+  column-gap: 24px;
+}
+
+.page-container__main{
+  width: 70%;
+}
+
+.page-container__header{
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+}
+
+.page-container__aux{
+  width: 30%;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     color: var(--color-text-dark-primary);
