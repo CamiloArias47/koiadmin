@@ -11,3 +11,9 @@
 .menu__list li{
   padding-bottom: 6px;
 }
+
+@media (prefers-color-scheme: dark) {
+  .menu__item--active a{
+    color: var(--color-text-dark-primary);
+  }
+}

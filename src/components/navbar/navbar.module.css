@@ -65,11 +65,15 @@
     transform: scale(1.1) translateZ(0);
 }
 
-/* @media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
     .navigation {
-      background-color: var(--color-primary);
+      background-color: var(--color-dark-secondary);
+      box-shadow: 0 4px 16px -8px #3e3e3e;
     }
-} */
+    .navigation__item--active a{
+        color: var(--color-text-dark-primary);
+    }
+}
 
 @media screen and (min-width: 768px){
     .navigation__list{
