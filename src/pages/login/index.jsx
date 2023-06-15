@@ -1,4 +1,5 @@
 import useLogin from '../../hooks/useLogin'
+import { InputField } from '../../components/form-inputs'
 import { formInput, form, loginBtn } from '../../styles'
 import styles from './styles.module.css'
 import googleLogo from '../../assets/imgs/logos/google.svg'
@@ -19,10 +20,10 @@ export default function Login () {
     <main className={styles.main}>
       <div className={styles['login-box']}>
         <h2 className={styles.title}>Ingreso</h2>
-        <form className={form} onSubmit={signIn}>
-          <input type="email" name="email" id="email" placeholder="Email" className={formInput} required/>
-          <input type="password" name="password" id="password" placeholder="Contraseña" className={formInput} required/>
-          <button type="submit" className={loginBtn}>Iniciar sesión</button>
+        <form className={styles['login-box__form']} onSubmit={signIn}>
+          <InputField type="email" name="email" id="email" titlename="Email" required/>
+          <InputField type="password" name="password" id="password" titlename="Contraseña" required/>
+          <button type="submit" className={styles['login-box__btn']}>Iniciar sesión</button>
         </form>
 
         <div className={styles['btns-container']}>

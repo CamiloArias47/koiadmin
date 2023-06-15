@@ -7,12 +7,13 @@
     font-size: 18px;
     font-weight: 500;
     line-height: 32px;
+    color: var(--color-text-secondary);
 }
 
 .input__border{
     position: relative;
     display: flex;
-    color: #000;
+    color: var(--color-text-primary);
     padding: 8px 16px;
     appearance: none;
     border-radius: 10px;
@@ -45,6 +46,9 @@
 @media (prefers-color-scheme: dark) {
   .input__border{
     background-color: transparent;
+  }
+  .input__label{
+    color: var(--color-text-dark-secondary);
   }
   .input__field{
     color: var(--color-text-dark-primary);
