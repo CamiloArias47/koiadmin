@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import PageLayout from '../../../layouts/page/pageLayout'
-import { InputField } from '../../../components/form-inputs'
+import { InputField, SelectField } from '../../../components/form-inputs'
 import Card from '../../../components/card'
 import ProductPreview from '../../../components/product-preview'
 import style from './create.module.css'
@@ -37,8 +37,8 @@ export default function CreateProduct (): JSX.Element {
   const form = (
     <Card>
       <form className={style['product-form']}>
-        <InputField id="category" name='category' type='text' titlename='Categoria' required/>
-        <InputField id="subcategory" name='subcategory' type='text' titlename='Subcategoria' required/>
+        <SelectField id="category" name='category' type='text' titlename='Categoria' required/>
+        <SelectField id="subcategory" name='subcategory' type='text' titlename='Subcategoria' required/>
         <InputField id="name" name='name' type='text' titlename='Nombre' required/>
         <InputField id="price" name='price' type='number' titlename='Precio unitario' required/>
         <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' required/>
