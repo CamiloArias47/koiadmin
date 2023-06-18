@@ -1,5 +1,5 @@
 
-export default function CloseIcon (props) {
+export default function CloseIcon (props: any): JSX.Element {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" {...props}>
         <g

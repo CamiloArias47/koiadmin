@@ -1,17 +1,37 @@
+import { useState } from 'react'
 import PageLayout from '../../../layouts/page/pageLayout'
 import { InputField } from '../../../components/form-inputs'
 import Card from '../../../components/card'
+import ProductPreview from '../../../components/product-preview'
 import style from './create.module.css'
-import viewDesktop from '../../../assets/imgs/view-desktop.png'
 
 export default function CreateProduct (): JSX.Element {
-  const header = <h1>Crear Producto</h1>
+  const [desktopView, setDesktopView] = useState(false)
+  const classPreviewDevice = desktopView ? style['card-preview'] : style['card-preview-mobile']
+
+  const header = (
+    <div className={style.header}>
+      <h1>Crear Producto</h1>
+      <div>
+        <button
+          onClick={ () => { setDesktopView(true) }}
+          className={style['btn-desktop']}
+        >
+          🖥️
+        </button>
+        <button onClick={ () => { setDesktopView(false) }}>
+          📱
+        </button>
+      </div>
+    </div>
+  )
 
   const preview = (
+    <Card className={classPreviewDevice}>
       <div className={style.preview}>
-        <h2>Vista previa</h2>
-        <img src={viewDesktop} className={style.preview__img}></img>
+        <ProductPreview desktop={desktopView}/>
       </div>
+    </Card>
   )
 
   const form = (

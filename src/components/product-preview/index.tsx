@@ -1,0 +1,112 @@
+import ImagePreview from './ImagePreview'
+import noPic from '../../assets/imgs/no-pic.jpeg'
+import { ShoppingBagIcon, HomeIcon } from '../../icons'
+import { formatPrice } from '../../utils'
+import styles from './previewstyles.module.css'
+
+interface productViewType {
+  desktop?: boolean
+  category?: string
+  subcategory?: string
+  mainpicture?: string
+  pictures?: string[]
+  name?: string
+  price?: number | bigint
+  descriptionHtml?: { __html: string | TrustedHTML } | undefined
+  colors?: [{ color: string, name: string }]
+}
+
+export default function ProductPreview ({
+  desktop = false,
+  category = 'Categoria',
+  subcategory = 'Subcategoria',
+  mainpicture = noPic,
+  pictures = [],
+  name = 'Vista previa',
+  price = 0,
+  descriptionHtml = { __html: '<p>Descripción del producto</p>' },
+  colors
+}: productViewType): JSX.Element {
+  const formatedPrice = formatPrice(price)
+  const desktopView = desktop ? styles.desktop : ''
+  let colorSelector = null
+
+  if (colors != null) {
+    colorSelector = colors.map(color => {
+      const bgColor = {
+        backgroundColor: color?.color
+      }
+      return (
+        <button
+          key={color.name + '-' + color.color}
+          className={styles['product-colors']}
+        >
+          <span>{color.name}</span>
+          {
+            color.color != null
+              ? <span className={styles['product-colors__ship']} style={bgColor}></span>
+              : null
+          }
+        </button>
+      )
+    })
+  }
+
+  return (
+    <section className={ desktopView + ' ' + styles['product-page-section'] + ' ' + styles.wraper }>
+      <ul className={styles.breadcrum}>
+        <li>
+            <a><HomeIcon width="22" height="22"/></a>
+        </li>
+        <li>
+            <a>{category}</a>
+        </li>
+        <li>
+            <a>{subcategory}</a>
+        </li>
+      </ul>
+      <div className={styles['product-image']}>
+            <div className={styles['product-image_main']}>
+            <img
+                src={mainpicture}
+                className={styles.productimg}
+            />
+            </div>
+            {
+              pictures.length > 0
+                ? <ImagePreview pics={[mainpicture, ...pictures]} name={name}/>
+                : ''
+            }
+      </div>
+      <div className={styles['product-details']}>
+            <h1 className={styles.h1}>{ name }</h1>
+            <span className={styles['product-price']}>{formatedPrice}</span>
+            <div className={styles['product-description']} dangerouslySetInnerHTML={descriptionHtml} />
+            <form className={styles['form-add']}>
+                {
+                  (colorSelector != null)
+                    ? <div className={styles['form-add__top']}>{colorSelector}</div>
+                    : null
+                }
+                <div className={styles['form-add__bottom']}>
+                    <div className={styles['form-group']}>
+                        <label htmlFor="cantidad-buy">Cantidad</label>
+                        <input
+                            type="number"
+                            title="cantidad"
+                            id="cantidad-buy"
+                            className={styles.input + ' ' + styles['input-basic']}
+                            min="1"
+                            required
+                        />
+                    </div>
+                    <button className={styles.btn + ' ' + styles['btn-primary']}>
+                        agregar
+                        <ShoppingBagIcon width="32" height="32" color="#fff"/>
+                    </button>
+                </div>
+            </form>
+      </div>
+    </section>
+  )
+}
