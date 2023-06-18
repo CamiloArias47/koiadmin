@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import useCreateProduct from '../../../store/useCreateProduct'
 import PageLayout from '../../../layouts/page/pageLayout'
 import { InputField, SelectField } from '../../../components/form-inputs'
 import Card from '../../../components/card'
@@ -6,6 +7,7 @@ import ProductPreview from '../../../components/product-preview'
 import style from './create.module.css'
 
 export default function CreateProduct (): JSX.Element {
+  const [updateCategory, updateSubcategory] = useCreateProduct(state => [state.updateCategory, state.updateSubcategory])
   const [desktopView, setDesktopView] = useState(false)
   const classPreviewDevice = desktopView ? style['card-preview'] : style['card-preview-mobile']
 
@@ -34,11 +36,31 @@ export default function CreateProduct (): JSX.Element {
     </Card>
   )
 
+  const handlerCategory = (_: string, cateName: string): void => {
+    updateCategory(cateName)
+  }
+
+  const catOptions = [
+    { value: '', name: '' },
+    { value: 'cat1', name: 'Facial' },
+    { value: 'cat2', name: 'Labiales' },
+    { value: 'cat3', name: 'Uñas' },
+    { value: 'cat4', name: 'Ojos' }
+  ]
+
+  const subCatOptions = [
+    { value: '', name: '' },
+    { value: 'cat1', name: 'Facial' },
+    { value: 'cat2', name: 'Labiales' },
+    { value: 'cat3', name: 'Uñas' },
+    { value: 'cat4', name: 'Ojos' }
+  ]
+
   const form = (
     <Card>
       <form className={style['product-form']}>
-        <SelectField id="category" name='category' type='text' titlename='Categoria' required/>
-        <SelectField id="subcategory" name='subcategory' type='text' titlename='Subcategoria' required/>
+        <SelectField id="category" name='category' type='text' titlename='Categoria' options={catOptions} onChange={handlerCategory} required/>
+        <SelectField id="subcategory" name='subcategory' type='text' titlename='Subcategoria' options={subCatOptions} required/>
         <InputField id="name" name='name' type='text' titlename='Nombre' required/>
         <InputField id="price" name='price' type='number' titlename='Precio unitario' required/>
         <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' required/>

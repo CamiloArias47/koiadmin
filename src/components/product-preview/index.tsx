@@ -1,3 +1,4 @@
+import useCreateProduct from '../../store/useCreateProduct'
 import ImagePreview from './ImagePreview'
 import noPic from '../../assets/imgs/no-pic.jpeg'
 import { ShoppingBagIcon, HomeIcon } from '../../icons'
@@ -6,8 +7,6 @@ import styles from './previewstyles.module.css'
 
 interface productViewType {
   desktop?: boolean
-  category?: string
-  subcategory?: string
   mainpicture?: string
   pictures?: string[]
   name?: string
@@ -18,8 +17,6 @@ interface productViewType {
 
 export default function ProductPreview ({
   desktop = false,
-  category = 'Categoria',
-  subcategory = 'Subcategoria',
   mainpicture = noPic,
   pictures = [],
   name = 'Vista previa',
@@ -27,6 +24,7 @@ export default function ProductPreview ({
   descriptionHtml = { __html: '<p>Descripción del producto</p>' },
   colors
 }: productViewType): JSX.Element {
+  const [category, subcategory] = useCreateProduct(state => [state.category, state.subcategory])
   const formatedPrice = formatPrice(price)
   const desktopView = desktop ? styles.desktop : ''
   let colorSelector = null

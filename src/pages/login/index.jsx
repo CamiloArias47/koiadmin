@@ -1,6 +1,5 @@
 import useLogin from '../../hooks/useLogin'
 import { InputField } from '../../components/form-inputs'
-import { formInput, form, loginBtn } from '../../styles'
 import styles from './styles.module.css'
 import googleLogo from '../../assets/imgs/logos/google.svg'
 import facebookLogo from '../../assets/imgs/logos/facebook.svg'

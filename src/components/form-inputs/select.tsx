@@ -6,22 +6,29 @@ interface selectFieldType {
   titlename: string
   type: string
   required?: boolean
+  options: Array<{ value: string, name: string }>
+  onChange?: (value: string, name: string) => void
 }
 
 export default function SelectField (props: selectFieldType): JSX.Element {
-  const { titlename, ...cleanProps } = props
+  const { titlename, options, onChange, ...cleanProps } = props
   const { id } = props
+
+  const handlerChange = (e: any): void => {
+    const { value, name } = e.target
+    if (onChange != null) onChange(value, name)
+  }
 
   return (
     <InputWraper id={id} titlename={titlename}>
       <select
+        onChange={handlerChange}
         className={styles.input__field}
         {...cleanProps}
       >
-        <option value="cat1">Cat 1</option>
-        <option value="cat2">Cat 2</option>
-        <option value="cat3">Cat 3</option>
-        <option value="cat4">Cat 4</option>
+        {
+          options.map(opt => <option key={opt.value} value={opt.value}>{opt.name}</option>)
+        }
       </select>
     </InputWraper>
   )
