@@ -1,22 +1,31 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import useCreateProduct from '../../../store/useCreateProduct'
+import useUserInterfaceStore, { ModalViews } from '../../../store/useUserInterface'
 import { getCategories } from '../../../services/firestore/categories'
 import PageLayout from '../../../layouts/page/pageLayout'
 import { InputField, SelectField } from '../../../components/form-inputs'
 import Card from '../../../components/card'
 import ProductPreview from '../../../components/product-preview'
+import { AddIcon } from '../../../icons'
 import style from './create.module.css'
+import type CategoryModelType from '../../../services/firestore/categories/category-model'
 
 export default function CreateProduct (): JSX.Element {
+  const emptySubCats = [{ value: '', name: '' }]
+  const allcategories = useRef<CategoryModelType[]>([])
+  const [updateModalView, updateShowModal] = useUserInterfaceStore(state => [state.updateModalView, state.updateShowModal])
   const [updateCategory, updateSubcategory] = useCreateProduct(state => [state.updateCategory, state.updateSubcategory])
   const [desktopView, setDesktopView] = useState(false)
-  const [catOptions, setCatOptions] = useState([{ value: '', name: 'Cargando...' }])
+  const [catOptions, setCatOptions] = useState<Array<{ value: string | undefined, name: string | undefined }>>([{ value: '', name: 'Cargando...' }])
+  const [subCatOptions, setSubCatOptions] = useState<Array<{ value: string | undefined, name: string | undefined }>>(emptySubCats)
   const classPreviewDevice = desktopView ? style['card-preview'] : style['card-preview-mobile']
 
   useEffect(() => {
     const getAllCategories = async (): Promise<void> => {
       const categories = await getCategories()
-      const catOptions = categories.map(cat => ({ value: cat.id, name: cat.id }))
+      allcategories.current = categories
+      let catOptions = categories.map(cat => ({ value: cat.id, name: cat.id?.replaceAll('-', ' ') }))
+      catOptions = [emptySubCats[0], ...catOptions]
       setCatOptions(catOptions)
     }
     void getAllCategories()
@@ -47,7 +56,16 @@ export default function CreateProduct (): JSX.Element {
     </Card>
   )
 
-  const handlerCategory = (_: string, cateName: string): void => {
+  const handlerCategory = (id: string, cateName: string): void => {
+    const subCatOfCatSelected = allcategories.current.find(cat => cat.id === id)
+    let subCatOptions = subCatOfCatSelected?.subcategories?.map(sub => ({ value: sub, name: sub.replaceAll('-', ' ') }))
+    if (subCatOptions !== undefined) {
+      subCatOptions = [emptySubCats[0], ...subCatOptions]
+      setSubCatOptions(subCatOptions)
+    } else {
+      setSubCatOptions(emptySubCats)
+    }
+    updateSubcategory('')
     updateCategory(cateName)
   }
 
@@ -55,18 +73,21 @@ export default function CreateProduct (): JSX.Element {
     updateSubcategory(subcate)
   }
 
-  const subCatOptions = [
-    { value: '', name: '' },
-    { value: 'cat1', name: 'Facial' },
-    { value: 'cat2', name: 'Labiales' },
-    { value: 'cat3', name: 'Uñas' },
-    { value: 'cat4', name: 'Ojos' }
-  ]
+  const handlerAddCategory = (e: any): void => {
+    e.preventDefault()
+    updateModalView(ModalViews.addCategory)
+    updateShowModal(true)
+  }
 
   const form = (
     <Card>
       <form className={style['product-form']}>
-        <SelectField id="category" name='category' type='text' titlename='Categoria' options={catOptions} onChange={handlerCategory} required/>
+        <div className={style['product-form__category']}>
+          <SelectField id="category" name='category' type='text' titlename='Categoria' options={catOptions} onChange={handlerCategory} required/>
+          <button type="button" className={style['product-form__category__btn']} onClick={handlerAddCategory}>
+            <AddIcon width="15"/>
+          </button>
+        </div>
         <SelectField id="subcategory" name='subcategory' type='text' titlename='Subcategoria' options={subCatOptions} onChange={handlerSubCategory} required/>
         <InputField id="name" name='name' type='text' titlename='Nombre' required/>
         <InputField id="price" name='price' type='number' titlename='Precio unitario' required/>
@@ -74,6 +95,7 @@ export default function CreateProduct (): JSX.Element {
         <InputField id="amount" name='amount' type='number' titlename='Cantidad' required/>
         <InputField id="description" name='description' type='text' titlename='Descripción' required/>
         <InputField id="colors" name='colors' type='text' titlename='Colores' required/>
+        <button type='submit'>Crear</button>
       </form>
     </Card>
   )

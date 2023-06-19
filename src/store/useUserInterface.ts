@@ -1,19 +1,24 @@
 import { create } from 'zustand'
 
+export enum ModalViews {
+  menu,
+  addCategory
+}
+
 interface UserInterfaceState {
   showModal: boolean
-  modalView: string
+  modalView: ModalViews
   theme: string
-  updateShowModal: (by: boolean) => void
-  updateModalView: (by: string) => void
+  updateShowModal: (showState: boolean) => void
+  updateModalView: (modalView: ModalViews) => void
   updateTheme: (by: string) => void
 }
 
 const useUserInterfaceStore = create<UserInterfaceState>(set => ({
   showModal: false,
-  modalView: 'menu',
+  modalView: ModalViews.menu,
   theme: 'default',
-  updateShowModal: (by) => { set(state => ({ showModal: !state.showModal })) },
+  updateShowModal: (showState) => { set(() => ({ showModal: showState })) },
   updateModalView: (modalView) => { set(() => ({ modalView })) },
   updateTheme: (theme) => { set(() => ({ theme })) }
 }))

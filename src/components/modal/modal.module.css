@@ -1,5 +1,5 @@
 .modal-window{
-    position: absolute;
+    position: fixed;
     display: flex;
     flex-wrap: wrap;
     background-color: #1c2631b3;

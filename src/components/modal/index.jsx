@@ -1,14 +1,20 @@
 import ModalLeftMenu from './menu'
+import AddCategory from './add-category'
 import { CloseIcon } from '../../icons'
 import { cancelBtn } from '../../styles'
-import useUserInterfaceStore from '../../store/useUserInterface'
+import useUserInterfaceStore, { ModalViews } from '../../store/useUserInterface'
 import styles from './modal.module.css'
 
 export default function Modal () {
   const [
     showModal,
+    modalView,
     updateShowModal
-  ] = useUserInterfaceStore(state => [state.showModal, state.updateShowModal])
+  ] = useUserInterfaceStore(state => [
+    state.showModal,
+    state.modalView,
+    state.updateShowModal
+  ])
 
   const openAnimation = open => {
     const windowModal = document.querySelector(`.${styles['modal-window']}`)
@@ -33,13 +39,14 @@ export default function Modal () {
   const closeModal = () => {
     openAnimation(false)
     setTimeout(() => {
-      updateShowModal()
+      updateShowModal(false)
     }, 300)
   }
 
   if (!showModal) return null
 
-  const body = <ModalLeftMenu />
+  let body = <ModalLeftMenu />
+  body = modalView === ModalViews.addCategory ? <AddCategory/> : body
 
   return (
     <div className={styles['modal-window']}>

@@ -34,3 +34,14 @@
     height: 80vh;
     overflow-y: scroll;
 }
+.product-form__category{
+    display: grid;
+    grid-template-columns: 7fr 1fr;
+    align-items: end;
+}
+.product-form__category__btn{
+    height: 56px;
+    width: 30px;
+    margin-left: 4px;
+    padding: 0;
+}

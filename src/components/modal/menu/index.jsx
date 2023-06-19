@@ -19,7 +19,7 @@ export default function ModalLeftMenu () {
    * Avoid to open modal after logout and then login again
    */
   const handlerLogout = () => {
-    updateShowModal()
+    updateShowModal(false)
     logout()
   }
 
