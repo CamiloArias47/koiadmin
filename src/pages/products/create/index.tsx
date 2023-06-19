@@ -40,6 +40,10 @@ export default function CreateProduct (): JSX.Element {
     updateCategory(cateName)
   }
 
+  const handlerSubCategory = (_: string, subcate: string): void => {
+    updateSubcategory(subcate)
+  }
+
   const catOptions = [
     { value: '', name: '' },
     { value: 'cat1', name: 'Facial' },
@@ -60,7 +64,7 @@ export default function CreateProduct (): JSX.Element {
     <Card>
       <form className={style['product-form']}>
         <SelectField id="category" name='category' type='text' titlename='Categoria' options={catOptions} onChange={handlerCategory} required/>
-        <SelectField id="subcategory" name='subcategory' type='text' titlename='Subcategoria' options={subCatOptions} required/>
+        <SelectField id="subcategory" name='subcategory' type='text' titlename='Subcategoria' options={subCatOptions} onChange={handlerSubCategory} required/>
         <InputField id="name" name='name' type='text' titlename='Nombre' required/>
         <InputField id="price" name='price' type='number' titlename='Precio unitario' required/>
         <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' required/>

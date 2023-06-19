@@ -15,7 +15,9 @@ export default function SelectField (props: selectFieldType): JSX.Element {
   const { id } = props
 
   const handlerChange = (e: any): void => {
-    const { value, name } = e.target
+    const { value, selectedIndex } = e.target
+    const selectedOption = e.target.options[selectedIndex]
+    const name = selectedOption.text
     if (onChange != null) onChange(value, name)
   }
 
