@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import useCreateProduct from '../../../store/useCreateProduct'
+import { getCategories } from '../../../services/firestore/categories'
 import PageLayout from '../../../layouts/page/pageLayout'
 import { InputField, SelectField } from '../../../components/form-inputs'
 import Card from '../../../components/card'
@@ -9,7 +10,17 @@ import style from './create.module.css'
 export default function CreateProduct (): JSX.Element {
   const [updateCategory, updateSubcategory] = useCreateProduct(state => [state.updateCategory, state.updateSubcategory])
   const [desktopView, setDesktopView] = useState(false)
+  const [catOptions, setCatOptions] = useState([{ value: '', name: 'Cargando...' }])
   const classPreviewDevice = desktopView ? style['card-preview'] : style['card-preview-mobile']
+
+  useEffect(() => {
+    const getAllCategories = async (): Promise<void> => {
+      const categories = await getCategories()
+      const catOptions = categories.map(cat => ({ value: cat.id, name: cat.id }))
+      setCatOptions(catOptions)
+    }
+    void getAllCategories()
+  }, [])
 
   const header = (
     <div className={style.header}>
@@ -43,14 +54,6 @@ export default function CreateProduct (): JSX.Element {
   const handlerSubCategory = (_: string, subcate: string): void => {
     updateSubcategory(subcate)
   }
-
-  const catOptions = [
-    { value: '', name: '' },
-    { value: 'cat1', name: 'Facial' },
-    { value: 'cat2', name: 'Labiales' },
-    { value: 'cat3', name: 'Uñas' },
-    { value: 'cat4', name: 'Ojos' }
-  ]
 
   const subCatOptions = [
     { value: '', name: '' },

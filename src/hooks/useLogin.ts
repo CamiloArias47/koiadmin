@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { firebaseApp } from '../services/init-firebase'
+import { firebaseApp } from '../services/public-init-firebase'
 import { redirect, useNavigate } from 'react-router-dom'
 import {
   getAuth,

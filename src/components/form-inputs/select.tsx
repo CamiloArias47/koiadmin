@@ -6,7 +6,7 @@ interface selectFieldType {
   titlename: string
   type: string
   required?: boolean
-  options: Array<{ value: string, name: string }>
+  options: Array<{ value: string | undefined, name: string | undefined }>
   onChange?: (value: string, name: string) => void
 }
 
