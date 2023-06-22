@@ -50,6 +50,8 @@
 
 .modal__body{
     padding: 12px;
+    height: 84vh;
+    overflow-y: scroll;
 }
 
 @media (prefers-color-scheme: dark) {

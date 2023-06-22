@@ -31,12 +31,14 @@ export default function Modal () {
   }
 
   if (showModal) {
+    document.body.classList.add('no-scroll')
     setTimeout(() => {
       openAnimation(true)
     }, 300)
   }
 
   const closeModal = () => {
+    document.body.classList.remove('no-scroll')
     openAnimation(false)
     setTimeout(() => {
       updateShowModal(false)

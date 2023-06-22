@@ -80,6 +80,10 @@ button:focus-visible,
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.no-scroll{
+  overflow: hidden;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     color: var(--color-text-dark-primary);

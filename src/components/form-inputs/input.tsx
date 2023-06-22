@@ -6,6 +6,8 @@ interface inputFieldType {
   titlename: string
   type: string
   required?: boolean
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  accept?: string
 }
 
 export default function InputField (props: inputFieldType): JSX.Element {
@@ -17,8 +19,7 @@ export default function InputField (props: inputFieldType): JSX.Element {
       <input
         className={styles.input__field}
         {...cleanProps}
-      >
-      </input>
+      />
     </InputWraper>
   )
 }
