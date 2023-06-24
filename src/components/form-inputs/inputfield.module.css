@@ -88,4 +88,8 @@
   .input__field{
     color: var(--color-text-dark-primary);
   }
+  .topics__topic{
+    border-color: var(--color-dark-primary);
+    background-color: var(--color-dark-secondary);
+  }
 }
