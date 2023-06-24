@@ -12,7 +12,7 @@ export default function AddCategory (): JSX.Element {
   const previewCanvasRef = useRef<HTMLCanvasElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
   const blobUrlRef = useRef('')
-  const inputFile = useRef<HTMLFormElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
   const [crop, setCrop] = useState<Crop | undefined>({
     unit: 'px',
@@ -83,15 +83,19 @@ export default function AddCategory (): JSX.Element {
         fileInput.files = dataTransfer.files
       }
 
-      if (inputFile.current != null) {
+      if (formRef.current != null) {
         console.log('poniendolo en el form')
-        inputFile.current.appendChild(fileInput)
+        formRef.current.appendChild(fileInput)
       }
     })
   }
 
+  const handlerSubmit = (e: React.FormEvent): void => {
+    e.preventDefault()
+  }
+
   return (
-    <form ref={inputFile}>
+    <form ref={formRef} onSubmit={handlerSubmit}>
         <h1>Crear categoria</h1>
         <InputField id="category-name" name="category-name" titlename="Nombre Categoria" type="text"/>
         <InputField id="category-image" name="category-image" titlename="Imagen" type="file" onChange={onSelectFile} accept="image/*"/>
