@@ -2,7 +2,7 @@ import { useState, useRef } from 'react'
 import useDebounceEffect from '../../../hooks/useDebounceEfect'
 import useCanvasPreview from '../../../hooks/useCanvasPreview'
 import ReactCrop, { type Crop, type PixelCrop } from 'react-image-crop'
-import { InputField } from '../../form-inputs'
+import { InputField, InputBtn } from '../../form-inputs'
 import src from '../../../assets/imgs/no-pic.jpeg'
 import styles from './addcategory.module.css'
 import 'react-image-crop/dist/ReactCrop.css'
@@ -12,7 +12,7 @@ export default function AddCategory (): JSX.Element {
   const previewCanvasRef = useRef<HTMLCanvasElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
   const blobUrlRef = useRef('')
-  const hiddenAnchorRef = useRef<HTMLAnchorElement>(null)
+  const inputFile = useRef<HTMLFormElement>(null)
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
   const [crop, setCrop] = useState<Crop | undefined>({
     unit: 'px',
@@ -68,16 +68,30 @@ export default function AddCategory (): JSX.Element {
       }
       console.log({ blob })
       blobUrlRef.current = URL.createObjectURL(blob)
-      if (hiddenAnchorRef.current != null) {
-        console.log({ url: blobUrlRef.current })
-        hiddenAnchorRef.current.href = blobUrlRef.current
-        // hiddenAnchorRef.current?.click()
+
+      const cropedFile = new File([blob], 'category-img', { type: 'image/*' })
+      const dataTransfer = new DataTransfer()
+      dataTransfer.items.add(cropedFile)
+      const fileInput = document.createElement('input')
+      fileInput.id = 'img-to-upload'
+      fileInput.type = 'file'
+      fileInput.name = 'archivo'
+      fileInput.style.visibility = 'hidden'
+      console.log('aca...')
+      if (fileInput?.files != null) {
+        console.log('aca...2')
+        fileInput.files = dataTransfer.files
+      }
+
+      if (inputFile.current != null) {
+        console.log('poniendolo en el form')
+        inputFile.current.appendChild(fileInput)
       }
     })
   }
 
   return (
-    <form>
+    <form ref={inputFile}>
         <h1>Crear categoria</h1>
         <InputField id="category-name" name="category-name" titlename="Nombre Categoria" type="text"/>
         <InputField id="category-image" name="category-image" titlename="Imagen" type="file" onChange={onSelectFile} accept="image/*"/>
@@ -104,21 +118,9 @@ export default function AddCategory (): JSX.Element {
               height: completedCrop?.height
             }}
           />
-          <button type="button" onClick={onDownloadCropClick}>Descargar</button>
-          <a
-              ref={hiddenAnchorRef}
-              download
-              style={{
-                position: 'absolute',
-                top: '-200vh',
-                visibility: 'hidden'
-              }}
-            >
-              Hidden download
-            </a>
         </div>
         <h1>Subcategorias</h1>
-        <InputField id="subcategory-name" name="subcategory-name" titlename="Nombre subcategoria" type="text"/>
+        <InputBtn id="subcategory-name" name="subcategory-name" titlename="Nombre" type="text"/>
         <button type='submit' className={styles['btn-submit']}>Guardar</button>
     </form>
   )
