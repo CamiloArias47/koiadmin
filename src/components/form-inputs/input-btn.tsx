@@ -12,10 +12,6 @@ interface inputFieldType {
   accept?: string
 }
 
-/**
- * if this component is child of a form element, enter key event only works if form has implemented 
- * onSubmit event with e.preventDefault() call.
- */
 export default function InputBtn (props: inputFieldType): JSX.Element {
   const [topics, setTopics] = useState<string[]>([])
   const inputTopics = useRef<HTMLInputElement>(null)
@@ -29,17 +25,18 @@ export default function InputBtn (props: inputFieldType): JSX.Element {
         const exist = topics.find(topic => topic.toLocaleLowerCase() === newTopic.toLocaleLowerCase())
         if (exist === undefined) {
           setTopics(prevTopics => [...prevTopics, newTopic])
-          inputTopics.current.value = ''
-        } else {
-          inputTopics.current.value = ''
         }
+        inputTopics.current.value = ''
+        inputTopics.current.focus()
       }
     }
   }
 
   const handlerKeyPress = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-    event.preventDefault()
-    if (event.key === 'Enter') handlerAdd()
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      handlerAdd()
+    }
   }
 
   const handlerDelete = (delTopic: string): void => {
@@ -54,7 +51,7 @@ export default function InputBtn (props: inputFieldType): JSX.Element {
           <input
               ref={inputTopics}
               className={styles.input__field}
-              onKeyUp={handlerKeyPress}
+              onKeyDown={handlerKeyPress}
               onSubmit={handlerKeyPress}
               {...cleanProps}
           />
