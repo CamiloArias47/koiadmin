@@ -10,12 +10,13 @@ interface inputFieldType {
   required?: boolean
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   accept?: string
+  getTopics?: (topics: string[]) => void
 }
 
 export default function InputBtn (props: inputFieldType): JSX.Element {
   const [topics, setTopics] = useState<string[]>([])
   const inputTopics = useRef<HTMLInputElement>(null)
-  const { titlename, ...cleanProps } = props
+  const { titlename, getTopics, ...cleanProps } = props
   const { id } = props
 
   const handlerAdd = (): void => {
@@ -24,7 +25,11 @@ export default function InputBtn (props: inputFieldType): JSX.Element {
       if (newTopic.length > 0) {
         const exist = topics.find(topic => topic.toLocaleLowerCase() === newTopic.toLocaleLowerCase())
         if (exist === undefined) {
-          setTopics(prevTopics => [...prevTopics, newTopic])
+          setTopics(prevTopics => {
+            const updatedTopics = [...prevTopics, newTopic]
+            if (getTopics !== undefined) getTopics(updatedTopics)
+            return updatedTopics
+          })
         }
         inputTopics.current.value = ''
         inputTopics.current.focus()
@@ -42,6 +47,7 @@ export default function InputBtn (props: inputFieldType): JSX.Element {
   const handlerDelete = (delTopic: string): void => {
     const newTopics = topics.filter(topic => topic !== delTopic)
     setTopics(newTopics)
+    if (getTopics !== undefined) getTopics(newTopics)
   }
 
   return (

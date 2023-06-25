@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, type FormEvent } from 'react'
 import useDebounceEffect from '../../../hooks/useDebounceEfect'
 import useCanvasPreview from '../../../hooks/useCanvasPreview'
 import ReactCrop, { type Crop, type PixelCrop } from 'react-image-crop'
@@ -13,6 +13,7 @@ export default function AddCategory (): JSX.Element {
   const imgRef = useRef<HTMLImageElement>(null)
   const blobUrlRef = useRef('')
   const formRef = useRef<HTMLFormElement>(null)
+  const subCategories = useRef<string[]>([])
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
   const [crop, setCrop] = useState<Crop | undefined>({
     unit: 'px',
@@ -54,7 +55,7 @@ export default function AddCategory (): JSX.Element {
     }
   }
 
-  const onDownloadCropClick = (): void => {
+  const createCrop = (cb: () => void): void => {
     if (previewCanvasRef.current == null) {
       throw new Error('Crop canvas does not exist')
     }
@@ -77,21 +78,33 @@ export default function AddCategory (): JSX.Element {
       fileInput.type = 'file'
       fileInput.name = 'archivo'
       fileInput.style.visibility = 'hidden'
-      console.log('aca...')
       if (fileInput?.files != null) {
-        console.log('aca...2')
         fileInput.files = dataTransfer.files
       }
 
       if (formRef.current != null) {
-        console.log('poniendolo en el form')
         formRef.current.appendChild(fileInput)
+        cb()
       }
     })
   }
 
-  const handlerSubmit = (e: React.FormEvent): void => {
+  const handlerSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
+    const form = e.currentTarget
+    createCrop(() => {
+      let categoryData = Object.fromEntries(new FormData(form))
+      if (subCategories.current !== null && subCategories.current.length > 0) {
+        categoryData = { ...categoryData, subcategories: subCategories.current }
+        console.log({ categoryData, e })
+      } else {
+        alert('agrega subcategorias...')
+      }
+    })
+  }
+
+  const getTopics = (topics: string[]): void => {
+    subCategories.current = topics
   }
 
   return (
@@ -124,7 +137,7 @@ export default function AddCategory (): JSX.Element {
           />
         </div>
         <h1>Subcategorias</h1>
-        <InputBtn id="subcategory-name" name="subcategory-name" titlename="Nombre" type="text"/>
+        <InputBtn id="subcategory-name" name="subcategory-name" titlename="Nombre" type="text" getTopics={getTopics}/>
         <button type='submit' className={styles['btn-submit']}>Guardar</button>
     </form>
   )
