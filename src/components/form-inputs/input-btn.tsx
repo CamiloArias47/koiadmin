@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import InputWraper from './input-wraper'
 import styles from './inputfield.module.css'
+import { CloseIcon } from '../../icons'
 interface inputFieldType {
   id: string
   name: string
@@ -21,16 +22,25 @@ export default function InputBtn (props: inputFieldType): JSX.Element {
     if (inputTopics.current != null) {
       const newTopic = inputTopics.current.value
       if (newTopic.length > 0) {
-        setTopics(prevTopics => [...prevTopics, newTopic])
-        inputTopics.current.value = ''
+        const exist = topics.find(topic => topic.toLocaleLowerCase() === newTopic.toLocaleLowerCase())
+        if (exist === undefined) {
+          setTopics(prevTopics => [...prevTopics, newTopic])
+          inputTopics.current.value = ''
+        } else {
+          inputTopics.current.value = ''
+        }
       }
     }
   }
 
   const handlerKeyPress = (event: React.KeyboardEvent<HTMLInputElement>): void => {
     event.preventDefault()
-    console.log({ key: event.key })
     if (event.key === 'Enter') handlerAdd()
+  }
+
+  const handlerDelete = (delTopic: string): void => {
+    const newTopics = topics.filter(topic => topic !== delTopic)
+    setTopics(newTopics)
   }
 
   return (
@@ -49,7 +59,14 @@ export default function InputBtn (props: inputFieldType): JSX.Element {
       </InputWraper>
       <div className={styles.topics}>
         {
-          topics.map(topic => <span key={topic} className={styles.topics__topic}>{ topic }</span>)
+          topics.map(topic => (
+            <span key={topic} className={styles.topics__topic}>
+              { topic }
+              <button type="button" className={styles.topics__delete} onClick={() => { handlerDelete(topic) }}>
+                <CloseIcon className={styles['close-icon']} width="12" />
+              </button>
+            </span>
+          ))
         }
       </div>
     </div>

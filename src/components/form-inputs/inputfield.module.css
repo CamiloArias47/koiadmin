@@ -76,6 +76,27 @@
   background-color: var(--color-primary);
   border-radius: 10px;
   padding: 2px 6px;
+  position: relative;
+}
+
+.topics__delete{
+  display: none;
+  position: absolute;
+  top: 0px;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background-color: var(--color-error);
+  color: white;
+}
+
+.topics__topic:hover .topics__delete{
+  display: block;
+}
+.topics__delete:hover{
+  background-color: var(--color-error);
+  border: 1px solid transparent;
 }
 
 @media (prefers-color-scheme: dark) {
