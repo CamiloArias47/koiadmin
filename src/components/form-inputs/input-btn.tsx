@@ -61,7 +61,7 @@ export default function InputBtn (props: inputFieldType): JSX.Element {
               onSubmit={handlerKeyPress}
               {...cleanProps}
           />
-          <button type='button' className={styles.input__btn} onClick={handlerAdd}>add</button>
+          <button type='button' className={styles.input__btn} onClick={handlerAdd}>Agregar</button>
         </>
       </InputWraper>
       <div className={styles.topics}>

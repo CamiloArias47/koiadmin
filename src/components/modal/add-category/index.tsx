@@ -67,7 +67,7 @@ export default function AddCategory (): JSX.Element {
       if (blobUrlRef.current.length > 0) {
         URL.revokeObjectURL(blobUrlRef.current)
       }
-      console.log({ blob })
+
       blobUrlRef.current = URL.createObjectURL(blob)
 
       const cropedFile = new File([blob], 'category-img', { type: 'image/*' })
@@ -93,13 +93,21 @@ export default function AddCategory (): JSX.Element {
     e.preventDefault()
     const form = e.currentTarget
     createCrop(() => {
-      let categoryData = Object.fromEntries(new FormData(form))
-      if (subCategories.current !== null && subCategories.current.length > 0) {
-        categoryData = { ...categoryData, subcategories: subCategories.current }
-        console.log({ categoryData, e })
-      } else {
-        alert('agrega subcategorias...')
+      const categoryData = new FormData(form)
+
+      if (subCategories.current === null || subCategories.current.length === 0) {
+        alert('Agrega al menos una subcategoria')
+        return false
       }
+      if (categoryData.get('categoryName') === null || categoryData.get('categoryName') === '') {
+        alert('El nombre de la categoria es requerido')
+        return false
+      }
+
+      categoryData.append('subcategories', subCategories.current.join(','))
+      categoryData.delete('categoryImage')
+      categoryData.delete('subcategoryName')
+      const categoryDataObj = Object.fromEntries(categoryData)
     })
   }
 
@@ -110,8 +118,8 @@ export default function AddCategory (): JSX.Element {
   return (
     <form ref={formRef} onSubmit={handlerSubmit}>
         <h1>Crear categoria</h1>
-        <InputField id="category-name" name="category-name" titlename="Nombre Categoria" type="text"/>
-        <InputField id="category-image" name="category-image" titlename="Imagen" type="file" onChange={onSelectFile} accept="image/*"/>
+        <InputField id="categoryName" name="categoryName" titlename="Nombre Categoria" type="text" required/>
+        <InputField id="categoryImage" name="categoryImage" titlename="Imagen" type="file" onChange={onSelectFile} accept="image/*" required/>
         <div className={styles.cropimg}>
           <ReactCrop
             crop={crop}
@@ -137,7 +145,7 @@ export default function AddCategory (): JSX.Element {
           />
         </div>
         <h1>Subcategorias</h1>
-        <InputBtn id="subcategory-name" name="subcategory-name" titlename="Nombre" type="text" getTopics={getTopics}/>
+        <InputBtn id="subcategoryName" name="subcategoryName" titlename="Nombre" type="text" getTopics={getTopics}/>
         <button type='submit' className={styles['btn-submit']}>Guardar</button>
     </form>
   )
