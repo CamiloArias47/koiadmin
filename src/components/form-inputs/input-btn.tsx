@@ -12,6 +12,10 @@ interface inputFieldType {
   accept?: string
 }
 
+/**
+ * if this component is child of a form element, enter key event only works if form has implemented 
+ * onSubmit event with e.preventDefault() call.
+ */
 export default function InputBtn (props: inputFieldType): JSX.Element {
   const [topics, setTopics] = useState<string[]>([])
   const inputTopics = useRef<HTMLInputElement>(null)
