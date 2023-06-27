@@ -8,7 +8,7 @@ import styles from './menu.module.css'
 export default function ModalLeftMenu () {
   const { logout } = useLogin()
   const { isActive } = useActivePage()
-  const updateShowModal = useUserInterfaceStore(state => state.updateShowModal)
+  const updateshowSideModal = useUserInterfaceStore(state => state.updateshowSideModal)
   const {
     home,
     products,
@@ -19,7 +19,7 @@ export default function ModalLeftMenu () {
    * Avoid to open modal after logout and then login again
    */
   const handlerLogout = () => {
-    updateShowModal(false)
+    updateshowSideModal(false)
     logout()
   }
 

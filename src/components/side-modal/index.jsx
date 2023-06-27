@@ -2,35 +2,35 @@ import ModalLeftMenu from './menu'
 import AddCategory from './add-category'
 import { CloseIcon } from '../../icons'
 import { cancelBtn } from '../../styles'
-import useUserInterfaceStore, { ModalViews } from '../../store/useUserInterface'
+import useUserInterfaceStore, { modalSideViews } from '../../store/useUserInterface'
 import styles from './modal.module.css'
 
-export default function Modal () {
+export default function SideModal () {
   const [
-    showModal,
-    modalView,
-    updateShowModal
+    showSideModal,
+    modalSideView,
+    updateshowSideModal
   ] = useUserInterfaceStore(state => [
-    state.showModal,
-    state.modalView,
-    state.updateShowModal
+    state.showSideModal,
+    state.modalSideView,
+    state.updateshowSideModal
   ])
 
   const openAnimation = open => {
     const windowModal = document.querySelector(`.${styles['modal-window']}`)
     const modal = document.querySelector(`.${styles.modal}`)
-    const showModalClass = styles['show-modal-window']
-    const showModalMainClass = styles['modal-slide']
+    const showSideModalClass = styles['show-modal-window']
+    const showSideModalMainClass = styles['modal-slide']
     if (open) {
-      if (windowModal) windowModal.classList.add(showModalClass)
-      if (modal) modal.classList.add(showModalMainClass)
+      if (windowModal) windowModal.classList.add(showSideModalClass)
+      if (modal) modal.classList.add(showSideModalMainClass)
     } else {
-      if (windowModal) windowModal.classList.remove(showModalClass)
-      if (modal) modal.classList.remove(showModalMainClass)
+      if (windowModal) windowModal.classList.remove(showSideModalClass)
+      if (modal) modal.classList.remove(showSideModalMainClass)
     }
   }
 
-  if (showModal) {
+  if (showSideModal) {
     document.body.classList.add('no-scroll')
     setTimeout(() => {
       openAnimation(true)
@@ -41,14 +41,14 @@ export default function Modal () {
     document.body.classList.remove('no-scroll')
     openAnimation(false)
     setTimeout(() => {
-      updateShowModal(false)
+      updateshowSideModal(false)
     }, 300)
   }
 
-  if (!showModal) return null
+  if (!showSideModal) return null
 
   let body = <ModalLeftMenu />
-  body = modalView === ModalViews.addCategory ? <AddCategory/> : body
+  body = modalSideView === modalSideViews.addCategory ? <AddCategory/> : body
 
   return (
     <div className={styles['modal-window']}>

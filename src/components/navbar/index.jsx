@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom'
-import useUserInterfaceStore, { ModalViews } from '../../store/useUserInterface'
+import useUserInterfaceStore, { modalSideViews } from '../../store/useUserInterface'
 import useActivePage from '../../hooks/useActivePage'
 import koiLogo from '../../assets/imgs/logos/koi-bag-big.png'
 import routes from '../../routes'
 import styles from './navbar.module.css'
 
 export default function Navbar () {
-  const [updateShowModal, updateModalView] = useUserInterfaceStore(state => [state.updateShowModal, state.updateModalView])
+  const [updateshowSideModal, updatemodalSideView] = useUserInterfaceStore(state => [state.updateshowSideModal, state.updatemodalSideView])
   const { isActive } = useActivePage()
   const {
     home,
@@ -15,8 +15,8 @@ export default function Navbar () {
   } = routes
 
   const handlerSandwichBtnClick = () => {
-    updateModalView(ModalViews.menu)
-    updateShowModal(true)
+    updatemodalSideView(modalSideViews.menu)
+    updateshowSideModal(true)
   }
 
   return (

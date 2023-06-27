@@ -1,6 +1,7 @@
 import { useState, useRef, type FormEvent } from 'react'
 import useDebounceEffect from '../../../hooks/useDebounceEfect'
 import useCanvasPreview from '../../../hooks/useCanvasPreview'
+import useUserInterfaceStore from '../../../store/useUserInterface'
 import ReactCrop, { type Crop, type PixelCrop } from 'react-image-crop'
 import { InputField, InputBtn } from '../../form-inputs'
 import src from '../../../assets/imgs/no-pic.jpeg'
@@ -23,6 +24,7 @@ export default function AddCategory (): JSX.Element {
     height: 250
   })
 
+  const updateshowModal = useUserInterfaceStore(state => state.updateshowModal)
   useDebounceEffect(
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     async (): Promise<void> => {
@@ -108,6 +110,8 @@ export default function AddCategory (): JSX.Element {
       categoryData.delete('categoryImage')
       categoryData.delete('subcategoryName')
       const categoryDataObj = Object.fromEntries(categoryData)
+      console.log({ categoryDataObj })
+      updateshowModal(true)
     })
   }
 

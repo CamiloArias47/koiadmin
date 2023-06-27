@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import useCreateProduct from '../../../store/useCreateProduct'
-import useUserInterfaceStore, { ModalViews } from '../../../store/useUserInterface'
+import useUserInterfaceStore, { modalSideViews } from '../../../store/useUserInterface'
 import { getCategories } from '../../../services/firestore/categories'
 import PageLayout from '../../../layouts/page/pageLayout'
 import { InputField, SelectField } from '../../../components/form-inputs'
@@ -13,7 +13,7 @@ import type CategoryModelType from '../../../services/firestore/categories/categ
 export default function CreateProduct (): JSX.Element {
   const emptySubCats = [{ value: '', name: '' }]
   const allcategories = useRef<CategoryModelType[]>([])
-  const [updateModalView, updateShowModal] = useUserInterfaceStore(state => [state.updateModalView, state.updateShowModal])
+  const [updatemodalSideView, updateshowSideModal] = useUserInterfaceStore(state => [state.updatemodalSideView, state.updateshowSideModal])
   const [updateCategory, updateSubcategory] = useCreateProduct(state => [state.updateCategory, state.updateSubcategory])
   const [desktopView, setDesktopView] = useState(false)
   const [catOptions, setCatOptions] = useState<Array<{ value: string | undefined, name: string | undefined }>>([{ value: '', name: 'Cargando...' }])
@@ -75,8 +75,8 @@ export default function CreateProduct (): JSX.Element {
 
   const handlerAddCategory = (e: any): void => {
     e.preventDefault()
-    updateModalView(ModalViews.addCategory)
-    updateShowModal(true)
+    updatemodalSideView(modalSideViews.addCategory)
+    updateshowSideModal(true)
   }
 
   const form = (
