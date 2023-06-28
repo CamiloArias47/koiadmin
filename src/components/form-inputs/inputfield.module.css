@@ -1,6 +1,7 @@
 .input{
     display: flex;
     flex-flow: column nowrap;
+    margin-bottom: 6px;
 }
 
 .input__label{
@@ -8,6 +9,10 @@
     font-weight: 500;
     line-height: 32px;
     color: var(--color-text-secondary);
+}
+
+.input--error .input__label{
+  color: var(--color-error);
 }
 
 .input__border{
@@ -22,11 +27,25 @@
     background-color: var(--color-white);
     align-items: center;
 }
+.input--error .input__border{
+  border: solid 1px var(--color-error);
+}
 
 .input__border:focus-visible, 
 .input__border:focus-within, 
 .input__border:hover{
     border: solid 1px var(--color-btn-primary);
+}
+
+.input--error .input__border:focus-visible, 
+.input--error .input__border:focus-within, 
+.input--error .input__border:hover{
+  border: solid 1px var(--color-error);
+}
+
+.input__errormsg{
+  height: 14px;
+  color: var(--color-error);
 }
 
 .input__field {

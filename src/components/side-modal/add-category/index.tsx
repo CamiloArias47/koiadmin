@@ -15,6 +15,7 @@ export default function AddCategory (): JSX.Element {
   const blobUrlRef = useRef('')
   const formRef = useRef<HTMLFormElement>(null)
   const subCategories = useRef<string[]>([])
+  const [categoryFieldError, setCategoryFieldError] = useState<string>()
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
   const [crop, setCrop] = useState<Crop | undefined>({
     unit: 'px',
@@ -97,12 +98,12 @@ export default function AddCategory (): JSX.Element {
     createCrop(() => {
       const categoryData = new FormData(form)
 
-      if (subCategories.current === null || subCategories.current.length === 0) {
-        alert('Agrega al menos una subcategoria')
+      if (categoryData.get('categoryName') === null || categoryData.get('categoryName') === '') {
+        setCategoryFieldError('Campo requerido')
         return false
       }
-      if (categoryData.get('categoryName') === null || categoryData.get('categoryName') === '') {
-        alert('El nombre de la categoria es requerido')
+      if (subCategories.current === null || subCategories.current.length === 0) {
+        alert('Agrega al menos una subcategoria')
         return false
       }
 
@@ -110,7 +111,6 @@ export default function AddCategory (): JSX.Element {
       categoryData.delete('categoryImage')
       categoryData.delete('subcategoryName')
       const categoryDataObj = Object.fromEntries(categoryData)
-      console.log({ categoryDataObj })
       updateshowModal(true)
     })
   }
@@ -122,8 +122,8 @@ export default function AddCategory (): JSX.Element {
   return (
     <form ref={formRef} onSubmit={handlerSubmit}>
         <h1>Crear categoria</h1>
-        <InputField id="categoryName" name="categoryName" titlename="Nombre Categoria" type="text" required/>
-        <InputField id="categoryImage" name="categoryImage" titlename="Imagen" type="file" onChange={onSelectFile} accept="image/*" required/>
+        <InputField id="categoryName" name="categoryName" titlename="Nombre Categoria" type="text" error={categoryFieldError}/>
+        <InputField id="categoryImage" name="categoryImage" titlename="Imagen" type="file" onChange={onSelectFile} accept="image/*" />
         <div className={styles.cropimg}>
           <ReactCrop
             crop={crop}
