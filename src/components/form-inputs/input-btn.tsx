@@ -11,12 +11,13 @@ interface inputFieldType {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   accept?: string
   getTopics?: (topics: string[]) => void
+  error?: string
 }
 
 export default function InputBtn (props: inputFieldType): JSX.Element {
   const [topics, setTopics] = useState<string[]>([])
   const inputTopics = useRef<HTMLInputElement>(null)
-  const { titlename, getTopics, ...cleanProps } = props
+  const { titlename, getTopics, error, ...cleanProps } = props
   const { id } = props
 
   const handlerAdd = (): void => {
@@ -52,7 +53,7 @@ export default function InputBtn (props: inputFieldType): JSX.Element {
 
   return (
     <div>
-      <InputWraper id={id} titlename={titlename}>
+      <InputWraper id={id} titlename={titlename} error={error} >
         <>
           <input
               ref={inputTopics}

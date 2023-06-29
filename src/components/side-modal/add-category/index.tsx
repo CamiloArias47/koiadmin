@@ -16,6 +16,8 @@ export default function AddCategory (): JSX.Element {
   const formRef = useRef<HTMLFormElement>(null)
   const subCategories = useRef<string[]>([])
   const [categoryFieldError, setCategoryFieldError] = useState<string>()
+  const [subCategoryFieldError, setSubCategoryFieldError] = useState<string>()
+  const [imageFieldError, setImageFieldError] = useState<string>()
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
   const [crop, setCrop] = useState<Crop | undefined>({
     unit: 'px',
@@ -92,20 +94,32 @@ export default function AddCategory (): JSX.Element {
     })
   }
 
+  const validateForm = (formData: FormData): boolean => {
+    let validForm = true
+    const mainImage: File = formData.get('categoryImage') as File
+    if (subCategories.current === null || subCategories.current.length === 0) {
+      setSubCategoryFieldError('Agrega al menos una subcategoría')
+      validForm = false
+    }
+    if (mainImage === null || mainImage === undefined || mainImage?.size === 0) {
+      setImageFieldError('La categoria necesita una imagen')
+      validForm = false
+    }
+    if (formData.get('categoryName') === null || formData.get('categoryName') === '') {
+      setCategoryFieldError('Campo requerido')
+      validForm = false
+    }
+    return validForm
+  }
+
   const handlerSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
     const form = e.currentTarget
     createCrop(() => {
       const categoryData = new FormData(form)
+      const validForm = validateForm(categoryData)
 
-      if (categoryData.get('categoryName') === null || categoryData.get('categoryName') === '') {
-        setCategoryFieldError('Campo requerido')
-        return false
-      }
-      if (subCategories.current === null || subCategories.current.length === 0) {
-        alert('Agrega al menos una subcategoria')
-        return false
-      }
+      if (!validForm) return false
 
       categoryData.append('subcategories', subCategories.current.join(','))
       categoryData.delete('categoryImage')
@@ -122,8 +136,8 @@ export default function AddCategory (): JSX.Element {
   return (
     <form ref={formRef} onSubmit={handlerSubmit}>
         <h1>Crear categoria</h1>
-        <InputField id="categoryName" name="categoryName" titlename="Nombre Categoria" type="text" error={categoryFieldError}/>
-        <InputField id="categoryImage" name="categoryImage" titlename="Imagen" type="file" onChange={onSelectFile} accept="image/*" />
+        <InputField id="categoryName" name="categoryName" titlename="Nombre Categoria" type="text" error={categoryFieldError} />
+        <InputField id="categoryImage" name="categoryImage" titlename="Imagen" type="file" onChange={onSelectFile} accept="image/*" error={imageFieldError}/>
         <div className={styles.cropimg}>
           <ReactCrop
             crop={crop}
@@ -148,8 +162,8 @@ export default function AddCategory (): JSX.Element {
             }}
           />
         </div>
-        <h1>Subcategorias</h1>
-        <InputBtn id="subcategoryName" name="subcategoryName" titlename="Nombre" type="text" getTopics={getTopics}/>
+        <h1>Subcategorías</h1>
+        <InputBtn id="subcategoryName" name="subcategoryName" titlename="Nombre" type="text" getTopics={getTopics} error={subCategoryFieldError}/>
         <button type='submit' className={styles['btn-submit']}>Guardar</button>
     </form>
   )

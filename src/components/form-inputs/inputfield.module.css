@@ -39,12 +39,13 @@
 
 .input--error .input__border:focus-visible, 
 .input--error .input__border:focus-within, 
-.input--error .input__border:hover{
+.input--error .input__border:hover {
   border: solid 1px var(--color-error);
 }
 
 .input__errormsg{
   height: 14px;
+  font-size: 12px;
   color: var(--color-error);
 }
 
