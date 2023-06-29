@@ -6,7 +6,6 @@
     color: #6f6f6f;
     display:flex;
     flex-direction:column;
-    padding-bottom: 3rem;
     background-color: white;
 }
 .product-image{
