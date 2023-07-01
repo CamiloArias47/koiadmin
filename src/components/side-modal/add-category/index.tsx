@@ -1,10 +1,10 @@
 import { useState, useRef, type FormEvent } from 'react'
+import { createPortal } from 'react-dom'
 import Modal from '../../../components/modal'
 import ProgressModal from './progress-modal'
 import useDebounceEffect from '../../../hooks/useDebounceEfect'
 import useCanvasPreview from '../../../hooks/useCanvasPreview'
 import useUploadImg from '../../../hooks/useUploadImg'
-import useUserInterfaceStore from '../../../store/useUserInterface'
 import ReactCrop, { type Crop, type PixelCrop } from 'react-image-crop'
 import { InputField, InputBtn } from '../../form-inputs'
 import src from '../../../assets/imgs/no-pic.jpeg'
@@ -13,6 +13,7 @@ import 'react-image-crop/dist/ReactCrop.css'
 
 export default function AddCategory (): JSX.Element {
   const [imgSrc, setImgSrc] = useState(src)
+  const [showModal, setShowModal] = useState(false)
   const previewCanvasRef = useRef<HTMLCanvasElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
   const blobUrlRef = useRef('')
@@ -30,8 +31,6 @@ export default function AddCategory (): JSX.Element {
     height: 250
   })
   const { totalProgress, loadImage } = useUploadImg()
-
-  const updateshowModal = useUserInterfaceStore(state => state.updateshowModal)
 
   useDebounceEffect(
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -120,7 +119,7 @@ export default function AddCategory (): JSX.Element {
 
     createCrop(categoryName, (file) => {
       loadImage(file, 'categories/')
-      updateshowModal(true)
+      setShowModal(true)
     })
   }
 
@@ -162,9 +161,18 @@ export default function AddCategory (): JSX.Element {
           <InputBtn id="subcategoryName" name="subcategoryName" titlename="Nombre" type="text" getTopics={getTopics} error={subCategoryFieldError}/>
           <button type='submit' className={styles['btn-submit']}>Guardar</button>
       </form>
-      <Modal title="Crear categoria">
-        <ProgressModal progress={totalProgress} />
-      </Modal>
+      {
+        createPortal(
+          <Modal
+            title="Crear categoria"
+            show={showModal}
+            onCloseModal={ () => { setShowModal(false) } }
+          >
+            <ProgressModal progress={totalProgress} />
+          </Modal>,
+          document.body
+        )
+      }
     </>
   )
 }

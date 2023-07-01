@@ -1,15 +1,13 @@
-import useUserInterfaceStore from '../../store/useUserInterface'
 import { CloseIcon } from '../../icons'
 import styles from './modal.module.css'
-export default function Modal ({ title, children }: { title: string, children: JSX.Element }): JSX.Element | null {
-  const [
-    showModal,
-    updateshowModal
-  ]: [boolean, (showState: boolean) => void] = useUserInterfaceStore((state: any) => [
-    state.showModal,
-    state.updateshowModal
-  ])
+interface ModalType {
+  title: string
+  show: boolean
+  children: JSX.Element
+  onCloseModal: () => void
+}
 
+export default function Modal ({ title, show, onCloseModal, children }: ModalType): JSX.Element | null {
   const openAnimation = (open: boolean): void => {
     const windowModal = document.querySelector(`.${styles.modal}`)
     const showModalClass = styles['show-modal']
@@ -20,20 +18,20 @@ export default function Modal ({ title, children }: { title: string, children: J
     }
   }
 
-  if (showModal) {
+  if (show) {
     document.body.classList.add('no-scroll')
     setTimeout(() => {
       openAnimation(true)
     }, 300)
   }
 
-  if (!showModal) return null
+  if (!show) return null
 
   const closeModal = (): void => {
     document.body.classList.remove('no-scroll')
     openAnimation(false)
     setTimeout(() => {
-      updateshowModal(false)
+      onCloseModal()
     }, 300)
   }
 
