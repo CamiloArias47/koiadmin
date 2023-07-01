@@ -1,4 +1,6 @@
 import { useState, useRef, type FormEvent } from 'react'
+import Modal from '../../../components/modal'
+import ProgressModal from './progress-modal'
 import useDebounceEffect from '../../../hooks/useDebounceEfect'
 import useCanvasPreview from '../../../hooks/useCanvasPreview'
 import useUploadImg from '../../../hooks/useUploadImg'
@@ -27,8 +29,10 @@ export default function AddCategory (): JSX.Element {
     width: 250,
     height: 250
   })
+  const { totalProgress, loadImage } = useUploadImg()
 
   const updateshowModal = useUserInterfaceStore(state => state.updateshowModal)
+
   useDebounceEffect(
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     async (): Promise<void> => {
@@ -115,7 +119,7 @@ export default function AddCategory (): JSX.Element {
     const categoryName = categoryDataObj.categoryName as string
 
     createCrop(categoryName, (file) => {
-      useUploadImg(file, 'categories/')
+      loadImage(file, 'categories/')
       updateshowModal(true)
     })
   }
@@ -125,37 +129,42 @@ export default function AddCategory (): JSX.Element {
   }
 
   return (
-    <form ref={formRef} onSubmit={handlerSubmit}>
-        <h1>Crear categoria</h1>
-        <InputField id="categoryName" name="categoryName" titlename="Nombre Categoria" type="text" error={categoryFieldError} />
-        <InputField id="categoryImage" name="categoryImage" titlename="Imagen" type="file" onChange={onSelectFile} accept="image/*" error={imageFieldError}/>
-        <div className={styles.cropimg}>
-          <ReactCrop
-            crop={crop}
-            onChange={c => { setCrop(c) }}
-            onComplete={(c) => { setCompletedCrop(c) }}
-            keepSelection
-            aspect={1}
-          >
-            <img
-              ref={imgRef}
-              src={imgSrc}
-              className={styles.cropimg}
+    <>
+      <form ref={formRef} onSubmit={handlerSubmit}>
+          <h1>Crear categoria</h1>
+          <InputField id="categoryName" name="categoryName" titlename="Nombre Categoria" type="text" error={categoryFieldError} />
+          <InputField id="categoryImage" name="categoryImage" titlename="Imagen" type="file" onChange={onSelectFile} accept="image/*" error={imageFieldError}/>
+          <div className={styles.cropimg}>
+            <ReactCrop
+              crop={crop}
+              onChange={c => { setCrop(c) }}
+              onComplete={(c) => { setCompletedCrop(c) }}
+              keepSelection
+              aspect={1}
+            >
+              <img
+                ref={imgRef}
+                src={imgSrc}
+                className={styles.cropimg}
+              />
+            </ReactCrop>
+            <canvas
+              ref={previewCanvasRef}
+              style={{
+                display: 'none',
+                objectFit: 'contain',
+                width: completedCrop?.width,
+                height: completedCrop?.height
+              }}
             />
-          </ReactCrop>
-          <canvas
-            ref={previewCanvasRef}
-            style={{
-              display: 'none',
-              objectFit: 'contain',
-              width: completedCrop?.width,
-              height: completedCrop?.height
-            }}
-          />
-        </div>
-        <h1>Subcategorías</h1>
-        <InputBtn id="subcategoryName" name="subcategoryName" titlename="Nombre" type="text" getTopics={getTopics} error={subCategoryFieldError}/>
-        <button type='submit' className={styles['btn-submit']}>Guardar</button>
-    </form>
+          </div>
+          <h1>Subcategorías</h1>
+          <InputBtn id="subcategoryName" name="subcategoryName" titlename="Nombre" type="text" getTopics={getTopics} error={subCategoryFieldError}/>
+          <button type='submit' className={styles['btn-submit']}>Guardar</button>
+      </form>
+      <Modal title="Crear categoria">
+        <ProgressModal progress={totalProgress} />
+      </Modal>
+    </>
   )
 }

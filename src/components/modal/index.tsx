@@ -1,7 +1,7 @@
 import useUserInterfaceStore from '../../store/useUserInterface'
 import { CloseIcon } from '../../icons'
 import styles from './modal.module.css'
-export default function Modal (): JSX.Element | null {
+export default function Modal ({ title, children }: { title: string, children: JSX.Element }): JSX.Element | null {
   const [
     showModal,
     updateshowModal
@@ -41,13 +41,13 @@ export default function Modal (): JSX.Element | null {
     <div className={styles.modal}>
         <div className={styles.modal_frame}>
           <div className={styles.modal__header}>
-            <h2>Titulo</h2>
+            <h2>{ title }</h2>
             <button className={styles.modal__closebtn} onClick={closeModal}>
               <CloseIcon width="14"/>
             </button>
           </div>
           <div className={styles.modal__body}>
-            Hola estoy en Georgia
+            { children }
           </div>
         </div>
     </div>

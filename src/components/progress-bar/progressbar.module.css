@@ -8,6 +8,8 @@
 
 .progress-bar__progress{
     height: 34px;
+    transition: width 300ms ease;
+    background-color: var(--color-btn-primary);
 }
 
 @media (prefers-color-scheme: dark) {
