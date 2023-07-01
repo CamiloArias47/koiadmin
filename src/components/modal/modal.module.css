@@ -50,3 +50,10 @@
 .modal__body{
 
 }
+
+@media (prefers-color-scheme: dark) {
+    .modal_frame{
+        background-color: var(--color-dark-primary);
+        border-color: var(--color-text-secondary);
+    }
+}

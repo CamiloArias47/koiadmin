@@ -12,7 +12,8 @@ export default function useUploadImg (file: File, storageFolder: string): void {
 
   uploadTask.on('state_changed',
     (snapshot) => {
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      progress = Math.floor(progress)
       console.log('Upload is ' + progress.toString() + '% done')
 
       switch (snapshot.state) {
