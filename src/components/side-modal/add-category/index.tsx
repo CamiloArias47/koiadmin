@@ -1,6 +1,7 @@
 import { useState, useRef, type FormEvent } from 'react'
 import useDebounceEffect from '../../../hooks/useDebounceEfect'
 import useCanvasPreview from '../../../hooks/useCanvasPreview'
+import useUploadImg from '../../../hooks/useUploadImg'
 import useUserInterfaceStore from '../../../store/useUserInterface'
 import ReactCrop, { type Crop, type PixelCrop } from 'react-image-crop'
 import { InputField, InputBtn } from '../../form-inputs'
@@ -60,7 +61,7 @@ export default function AddCategory (): JSX.Element {
     }
   }
 
-  const createCrop = (cb: () => void): void => {
+  const createCrop = (imgName: string, cb: (file: File) => void): void => {
     if (previewCanvasRef.current == null) {
       throw new Error('Crop canvas does not exist')
     }
@@ -75,22 +76,8 @@ export default function AddCategory (): JSX.Element {
 
       blobUrlRef.current = URL.createObjectURL(blob)
 
-      const cropedFile = new File([blob], 'category-img', { type: 'image/*' })
-      const dataTransfer = new DataTransfer()
-      dataTransfer.items.add(cropedFile)
-      const fileInput = document.createElement('input')
-      fileInput.id = 'img-to-upload'
-      fileInput.type = 'file'
-      fileInput.name = 'archivo'
-      fileInput.style.visibility = 'hidden'
-      if (fileInput?.files != null) {
-        fileInput.files = dataTransfer.files
-      }
-
-      if (formRef.current != null) {
-        formRef.current.appendChild(fileInput)
-        cb()
-      }
+      const cropedFile = new File([blob], imgName + '.jpeg', { type: 'image/jpeg' })
+      cb(cropedFile)
     })
   }
 
@@ -115,16 +102,20 @@ export default function AddCategory (): JSX.Element {
   const handlerSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
     const form = e.currentTarget
-    createCrop(() => {
-      const categoryData = new FormData(form)
-      const validForm = validateForm(categoryData)
+    const categoryData = new FormData(form)
+    const validForm = validateForm(categoryData)
 
-      if (!validForm) return false
+    if (!validForm) return
 
-      categoryData.append('subcategories', subCategories.current.join(','))
-      categoryData.delete('categoryImage')
-      categoryData.delete('subcategoryName')
-      const categoryDataObj = Object.fromEntries(categoryData)
+    categoryData.append('subcategories', subCategories.current.join(','))
+    categoryData.delete('categoryImage')
+    categoryData.delete('subcategoryName')
+    const categoryDataObj = Object.fromEntries(categoryData)
+    // ojo validar: si el nombre tienen espacicos cambiarlos por un guion
+    const categoryName = categoryDataObj.categoryName as string
+
+    createCrop(categoryName, (file) => {
+      useUploadImg(file, 'categories/')
       updateshowModal(true)
     })
   }
