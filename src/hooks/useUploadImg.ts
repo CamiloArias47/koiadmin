@@ -4,13 +4,13 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 
 interface useUploadImgType {
   totalProgress: string
-  loadImage: (file: File, storageFolder: string) => void
+  loadImage: (file: File, storageFolder: string, onImageUploaded: (downloadURL: string) => void) => void
 }
 
 export default function useUploadImg (): useUploadImgType {
   const [totalProgress, setTotalProgress] = useState('0')
 
-  const loadImage = (file: File, storageFolder: string): void => {
+  const loadImage = (file: File, storageFolder: string, onImageUploaded: (downloadURL: string) => void): void => {
     const metadata = {
       contentType: 'image/jpeg',
       type: file.type
@@ -40,7 +40,7 @@ export default function useUploadImg (): useUploadImgType {
       },
       () => {
         void getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log('File available at', downloadURL)
+          onImageUploaded(downloadURL)
         })
       }
     )

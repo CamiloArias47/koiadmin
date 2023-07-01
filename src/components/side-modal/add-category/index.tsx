@@ -1,5 +1,6 @@
 import { useState, useRef, type FormEvent } from 'react'
 import { createPortal } from 'react-dom'
+import { saveCategory } from '../../../services/firestore/categories'
 import Modal from '../../../components/modal'
 import ProgressModal from './progress-modal'
 import useDebounceEffect from '../../../hooks/useDebounceEfect'
@@ -110,16 +111,22 @@ export default function AddCategory (): JSX.Element {
 
     if (!validForm) return
 
-    categoryData.append('subcategories', subCategories.current.join(','))
-    categoryData.delete('categoryImage')
-    categoryData.delete('subcategoryName')
     const categoryDataObj = Object.fromEntries(categoryData)
     // ojo validar: si el nombre tienen espacicos cambiarlos por un guion
     const categoryName = categoryDataObj.categoryName as string
+    const subcategories = subCategories.current
 
     createCrop(categoryName, (file) => {
-      loadImage(file, 'categories/')
       setShowModal(true)
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      loadImage(file, 'categories/', async (photo: string): Promise<void> => {
+        const response = await saveCategory({
+          id: categoryName,
+          photo,
+          subcategories
+        })
+        console.log({ response })
+      })
     })
   }
 
