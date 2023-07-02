@@ -1,9 +1,20 @@
 import ProgressBar from '../../progress-bar'
-export default function ProgressModal ({ progress }: { progress: string }): JSX.Element {
+import { SuccessAnimation } from '../../../icons'
+import styles from './progressmodal.module.css'
+export default function ProgressModal ({ progress, finished }: { progress: string, finished?: boolean }): JSX.Element {
+  const successAnimation = (finished !== undefined && finished)
+    ? <div>
+        <SuccessAnimation />
+        <h2>¡Categoria Creada!</h2>
+      </div>
+    : <h3>Subiendo imagen</h3>
+
   return (
     <div>
-        Subiendo imagen:
-        <ProgressBar progress={ progress }/>
+      <div className={styles.modal__body}>
+       { successAnimation }
+      </div>
+      <ProgressBar progress={ progress }/>
     </div>
   )
 }

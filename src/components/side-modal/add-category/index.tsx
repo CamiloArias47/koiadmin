@@ -1,6 +1,7 @@
 import { useState, useRef, type FormEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { saveCategory } from '../../../services/firestore/categories'
+import useUserInterfaceStore from '../../../store/useUserInterface'
 import Modal from '../../../components/modal'
 import ProgressModal from './progress-modal'
 import useDebounceEffect from '../../../hooks/useDebounceEfect'
@@ -15,6 +16,7 @@ import 'react-image-crop/dist/ReactCrop.css'
 export default function AddCategory (): JSX.Element {
   const [imgSrc, setImgSrc] = useState(src)
   const [showModal, setShowModal] = useState(false)
+  const [categoryCreated, setCategoryCreated] = useState(false)
   const previewCanvasRef = useRef<HTMLCanvasElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
   const blobUrlRef = useRef('')
@@ -32,6 +34,7 @@ export default function AddCategory (): JSX.Element {
     height: 250
   })
   const { totalProgress, loadImage } = useUploadImg()
+  const updateshowSideModal = useUserInterfaceStore(state => state.updateshowSideModal)
 
   useDebounceEffect(
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -121,12 +124,20 @@ export default function AddCategory (): JSX.Element {
       setShowModal(true)
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       loadImage(file, 'categories/', async (photo: string): Promise<void> => {
-        const response = await saveCategory({
+        saveCategory({
           id: categoryName,
           photo,
           subcategories
         })
-        console.log({ response })
+          .then(() => {
+            setCategoryCreated(true)
+            setTimeout(() => {
+              updateshowSideModal(false)
+            }, 3000)
+          })
+          .catch(err => {
+            console.log({ err })
+          })
       })
     })
   }
@@ -176,7 +187,10 @@ export default function AddCategory (): JSX.Element {
             show={showModal}
             onCloseModal={ () => { setShowModal(false) } }
           >
-            <ProgressModal progress={totalProgress} />
+            <ProgressModal
+              progress={totalProgress}
+              finished={categoryCreated}
+            />
           </Modal>,
           document.body
         )
