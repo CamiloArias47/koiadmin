@@ -113,7 +113,8 @@ export default function AddCategory (): JSX.Element {
 
     const categoryDataObj = Object.fromEntries(categoryData)
     // ojo validar: si el nombre tienen espacicos cambiarlos por un guion
-    const categoryName = categoryDataObj.categoryName as string
+    let categoryName = categoryDataObj.categoryName as string
+    categoryName = categoryName.replaceAll(' ', '-')
     const subcategories = subCategories.current
 
     createCrop(categoryName, (file) => {
