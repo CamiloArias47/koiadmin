@@ -1,6 +1,7 @@
 import { useState, useRef, type FormEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { saveCategory } from '../../../services/firestore/categories'
+import useStore from '../../../store/useStore'
 import useUserInterfaceStore from '../../../store/useUserInterface'
 import Modal from '../../../components/modal'
 import ProgressModal from './progress-modal'
@@ -34,6 +35,7 @@ export default function AddCategory (): JSX.Element {
     height: 250
   })
   const { totalProgress, loadImage } = useUploadImg()
+  const updateCategories = useStore(state => state.updateCategories)
   const updateshowSideModal = useUserInterfaceStore(state => state.updateshowSideModal)
 
   useDebounceEffect(
@@ -117,7 +119,8 @@ export default function AddCategory (): JSX.Element {
     const categoryDataObj = Object.fromEntries(categoryData)
     // ojo validar: si el nombre tienen espacicos cambiarlos por un guion
     let categoryName = categoryDataObj.categoryName as string
-    categoryName = categoryName.trim().replaceAll(' ', '-')
+    categoryName = categoryName.trim()
+    const categoryId = categoryName.replaceAll(' ', '-')
     let subcategories = subCategories.current
     subcategories = subcategories.map(subcategory => subcategory.trim().replaceAll(' ', '-'))
 
@@ -126,11 +129,13 @@ export default function AddCategory (): JSX.Element {
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       loadImage(file, 'categories/', async (photo: string): Promise<void> => {
         saveCategory({
-          id: categoryName,
+          id: categoryId,
+          name: categoryName,
           photo,
           subcategories
         })
           .then(() => {
+            void updateCategories()
             setCategoryCreated(true)
             form.reset()
             setTimeout(() => {

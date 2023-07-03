@@ -1,18 +1,17 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
+import useStore from '../../../store/useStore'
 import useCreateProduct from '../../../store/useCreateProduct'
 import useUserInterfaceStore, { modalSideViews } from '../../../store/useUserInterface'
-import { getCategories } from '../../../services/firestore/categories'
 import PageLayout from '../../../layouts/page/pageLayout'
 import { InputField, SelectField } from '../../../components/form-inputs'
 import Card from '../../../components/card'
 import ProductPreview from '../../../components/product-preview'
 import { AddIcon } from '../../../icons'
 import style from './create.module.css'
-import type CategoryModelType from '../../../services/firestore/categories/category-model'
 
 export default function CreateProduct (): JSX.Element {
   const emptySubCats = [{ value: '', name: '' }]
-  const allcategories = useRef<CategoryModelType[]>([])
+  const [allcategories, updateCategories] = useStore(state => [state.categories, state.updateCategories])
   const [updatemodalSideView, updateshowSideModal] = useUserInterfaceStore(state => [state.updatemodalSideView, state.updateshowSideModal])
   const [updateCategory, updateSubcategory] = useCreateProduct(state => [state.updateCategory, state.updateSubcategory])
   const [desktopView, setDesktopView] = useState(false)
@@ -21,15 +20,20 @@ export default function CreateProduct (): JSX.Element {
   const classPreviewDevice = desktopView ? style['card-preview'] : style['card-preview-mobile']
 
   useEffect(() => {
-    const getAllCategories = async (): Promise<void> => {
-      const categories = await getCategories()
-      allcategories.current = categories
-      let catOptions = categories.map(cat => ({ value: cat.id, name: cat.id?.replaceAll('-', ' ') }))
+    const getCategories = async (): Promise<void> => {
+      await updateCategories()
+    }
+    void getCategories()
+  }, [])
+
+  useEffect(() => {
+    const getAllCategories = (): void => {
+      let catOptions = allcategories.map(cat => ({ value: cat.id, name: cat.name }))
       catOptions = [emptySubCats[0], ...catOptions]
       setCatOptions(catOptions)
     }
-    void getAllCategories()
-  }, [])
+    getAllCategories()
+  }, [allcategories])
 
   const header = (
     <div className={style.header}>
@@ -57,7 +61,7 @@ export default function CreateProduct (): JSX.Element {
   )
 
   const handlerCategory = (id: string, cateName: string): void => {
-    const subCatOfCatSelected = allcategories.current.find(cat => cat.id === id)
+    const subCatOfCatSelected = allcategories.find(cat => cat.id === id)
     let subCatOptions = subCatOfCatSelected?.subcategories?.map(sub => ({ value: sub, name: sub.replaceAll('-', ' ') }))
     if (subCatOptions !== undefined) {
       subCatOptions = [emptySubCats[0], ...subCatOptions]
