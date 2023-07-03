@@ -133,4 +133,7 @@
     border-color: var(--color-dark-primary);
     background-color: var(--color-dark-secondary);
   }
+  .select__option{
+    background-color: var(--color-dark-primary);
+  }
 }

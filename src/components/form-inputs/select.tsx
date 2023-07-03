@@ -29,7 +29,7 @@ export default function SelectField (props: selectFieldType): JSX.Element {
         {...cleanProps}
       >
         {
-          options.map(opt => <option key={opt.value} value={opt.value}>{opt.name}</option>)
+          options.map(opt => <option key={opt.value} value={opt.value} className={styles.select__option}>{opt.name}</option>)
         }
       </select>
     </InputWraper>
