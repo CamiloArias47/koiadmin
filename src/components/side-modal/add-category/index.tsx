@@ -117,8 +117,9 @@ export default function AddCategory (): JSX.Element {
     const categoryDataObj = Object.fromEntries(categoryData)
     // ojo validar: si el nombre tienen espacicos cambiarlos por un guion
     let categoryName = categoryDataObj.categoryName as string
-    categoryName = categoryName.replaceAll(' ', '-')
-    const subcategories = subCategories.current
+    categoryName = categoryName.trim().replaceAll(' ', '-')
+    let subcategories = subCategories.current
+    subcategories = subcategories.map(subcategory => subcategory.trim().replaceAll(' ', '-'))
 
     createCrop(categoryName, (file) => {
       setShowModal(true)
@@ -131,6 +132,7 @@ export default function AddCategory (): JSX.Element {
         })
           .then(() => {
             setCategoryCreated(true)
+            form.reset()
             setTimeout(() => {
               updateshowSideModal(false)
             }, 3000)
