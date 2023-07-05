@@ -3,6 +3,7 @@ import ImagePreview from './ImagePreview'
 import noPic from '../../assets/imgs/no-pic.jpeg'
 import { ShoppingBagIcon, HomeIcon } from '../../icons'
 import { formatPrice } from '../../utils'
+import { type PixelCrop } from 'react-image-crop'
 import styles from './previewstyles.module.css'
 
 interface productViewType {
@@ -13,6 +14,8 @@ interface productViewType {
   price?: number | bigint
   descriptionHtml?: { __html: string | TrustedHTML } | undefined
   colors?: [{ color: string, name: string }]
+  imagePreviewRef: React.RefObject<HTMLCanvasElement>
+  completedCrop: PixelCrop | undefined
 }
 
 export default function ProductPreview ({
@@ -22,7 +25,9 @@ export default function ProductPreview ({
   name = 'Vista previa',
   price = 0,
   descriptionHtml = { __html: '<p>Descripción del producto</p>' },
-  colors
+  colors,
+  imagePreviewRef,
+  completedCrop
 }: productViewType): JSX.Element {
   const [category, subcategory] = useCreateProduct(state => [state.category, state.subcategory])
   const formatedPrice = formatPrice(price)
@@ -65,9 +70,12 @@ export default function ProductPreview ({
       </ul>
       <div className={styles['product-image']}>
             <div className={styles['product-image_main']}>
-            <img
-                src={mainpicture}
-                className={styles.productimg}
+            <canvas
+              className={styles.productimg}
+              ref={imagePreviewRef}
+              style={{
+                objectFit: 'contain'
+              }}
             />
             </div>
             {
