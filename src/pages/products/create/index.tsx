@@ -94,6 +94,13 @@ export default function CreateProduct (): JSX.Element {
         </div>
         <SelectField id="subcategory" name='subcategory' type='text' titlename='Subcategoria' options={subCatOptions} onChange={handlerSubCategory} required/>
         <InputField id="name" name='name' type='text' titlename='Nombre' required/>
+        <div className={style['image-handler']}>
+          <div className={style['image-handler__help-text']}>
+            <span className={style['image-handler__help-text--title']}>Imagen principal</span>
+            <span>Selecciona o arrastra una imagen</span>
+          </div>
+          <input type='file' name="mainpic" id="mainpic"/>
+        </div>
         <InputField id="price" name='price' type='number' titlename='Precio unitario' required/>
         <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' required/>
         <InputField id="amount" name='amount' type='number' titlename='Cantidad' required/>
