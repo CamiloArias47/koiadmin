@@ -55,6 +55,15 @@ export default function ProductPreview ({
     })
   }
 
+  console.log({ imagePreviewRef })
+  const previewImgOrCanvas = completedCrop === undefined
+    ? <img src={noPic} alt='main image' className={styles.productimg}/>
+    : <canvas
+        className={styles.productimg}
+        ref={imagePreviewRef}
+        style={{ objectFit: 'contain' }}
+      />
+
   return (
     <section className={ desktopView + ' ' + styles['product-page-section'] + ' ' + styles.wraper }>
       <ul className={styles.breadcrum}>
@@ -70,13 +79,9 @@ export default function ProductPreview ({
       </ul>
       <div className={styles['product-image']}>
             <div className={styles['product-image_main']}>
-            <canvas
-              className={styles.productimg}
-              ref={imagePreviewRef}
-              style={{
-                objectFit: 'contain'
-              }}
-            />
+            {
+              previewImgOrCanvas
+            }
             </div>
             {
               pictures.length > 0
