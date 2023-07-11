@@ -9,7 +9,7 @@ import PageLayout from '../../../layouts/page/pageLayout'
 import { InputField, SelectField } from '../../../components/form-inputs'
 import Card from '../../../components/card'
 import ProductPreview from '../../../components/product-preview'
-import { AddIcon } from '../../../icons'
+import { AddIcon, CloseIcon } from '../../../icons'
 import src from '../../../assets/imgs/no-pic.jpeg'
 import style from './create.module.css'
 
@@ -73,7 +73,6 @@ export default function CreateProduct (): JSX.Element {
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files != null && e.target.files.length > 0) {
-      console.log({ value: e.target.value, target: e.target, file: e.target.files[0] })
       const reader = new FileReader()
       reader.addEventListener('load', () => {
         setImgSrc(reader.result?.toString() ?? '')
@@ -130,6 +129,41 @@ export default function CreateProduct (): JSX.Element {
     updateshowSideModal(true)
   }
 
+  const quitMainImage = (): void => {
+    setImgSrc(src)
+  }
+
+  const cropImgHandler = imgSrc === src
+    ? <div className={style['image-handler']}>
+          <div className={style['image-handler__help-text']}>
+            <span className={style['image-handler__help-text--title']}>Imagen principal</span>
+            <span>Selecciona o arrastra una imagen</span>
+          </div>
+          <input type='file' name="mainpic" id="mainpic" onChange={onSelectFile}/>
+        </div>
+    : <div className={style['image-croper']}>
+        <ReactCrop
+          crop={crop}
+          onChange={c => { setCrop(c) }}
+          onComplete={(c) => { setCompletedCrop(c) }}
+          keepSelection
+          aspect={1}
+          className={style['image-croper__croper']}
+        >
+          <img
+            ref={imgRef}
+            src={imgSrc}
+            className={style['image-croper__img']}
+          />
+        </ReactCrop>
+        <div className={style['image-croper__cancel']}>
+          Cancelar (Seleccionar otra imagen)
+          <button className={style['image-croper__cancel-btn']} onClick={quitMainImage}>
+            <CloseIcon width="10"/>
+          </button>
+        </div>
+      </div>
+
   const form = (
     <Card>
       <form className={style['product-form']}>
@@ -142,25 +176,9 @@ export default function CreateProduct (): JSX.Element {
         <SelectField id="subcategory" name='subcategory' type='text' titlename='Subcategoria' options={subCatOptions} onChange={handlerSubCategory} required/>
         <InputField id="name" name='name' type='text' titlename='Nombre' required/>
 
-        <div className={style['image-handler']}>
-          <div className={style['image-handler__help-text']}>
-            <span className={style['image-handler__help-text--title']}>Imagen principal</span>
-            <span>Selecciona o arrastra una imagen</span>
-          </div>
-          <input type='file' name="mainpic" id="mainpic" onChange={onSelectFile}/>
-        </div>
-        <ReactCrop
-          crop={crop}
-          onChange={c => { setCrop(c) }}
-          onComplete={(c) => { setCompletedCrop(c) }}
-          keepSelection
-          aspect={1}
-        >
-          <img
-            ref={imgRef}
-            src={imgSrc}
-          />
-        </ReactCrop>
+        {
+          cropImgHandler
+        }
 
         <InputField id="price" name='price' type='number' titlename='Precio unitario' required/>
         <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' required/>
