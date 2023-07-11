@@ -131,6 +131,7 @@ export default function CreateProduct (): JSX.Element {
 
   const quitMainImage = (): void => {
     setImgSrc(src)
+    setCompletedCrop(undefined)
   }
 
   const cropImgHandler = imgSrc === src
