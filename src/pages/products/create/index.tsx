@@ -17,7 +17,12 @@ export default function CreateProduct (): JSX.Element {
   const emptySubCats = [{ value: '', name: '' }]
   const [allcategories, updateCategories] = useStore(state => [state.categories, state.updateCategories])
   const [updatemodalSideView, updateshowSideModal] = useUserInterfaceStore(state => [state.updatemodalSideView, state.updateshowSideModal])
-  const [updateCategory, updateSubcategory] = useCreateProduct(state => [state.updateCategory, state.updateSubcategory])
+  const [
+    updateCategory,
+    updateSubcategory,
+    updateName,
+    updateSalePrice
+  ] = useCreateProduct(state => [state.updateCategory, state.updateSubcategory, state.updateName, state.updateSalePrice])
   const [desktopView, setDesktopView] = useState(false)
   const [catOptions, setCatOptions] = useState<Array<{ value: string | undefined, name: string | undefined }>>([{ value: '', name: 'Cargando...' }])
   const [subCatOptions, setSubCatOptions] = useState<Array<{ value: string | undefined, name: string | undefined }>>(emptySubCats)
@@ -129,6 +134,16 @@ export default function CreateProduct (): JSX.Element {
     updateshowSideModal(true)
   }
 
+  const handlerInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const input = e.target.name
+    const value = e.target.value
+    if (input === 'name') updateName(value)
+    if (input === 'saleprice') {
+      const salePrice = value !== '' ? parseInt(value) : 0
+      updateSalePrice(salePrice)
+    }
+  }
+
   const quitMainImage = (): void => {
     setImgSrc(src)
     setCompletedCrop(undefined)
@@ -175,14 +190,14 @@ export default function CreateProduct (): JSX.Element {
           </button>
         </div>
         <SelectField id="subcategory" name='subcategory' type='text' titlename='Subcategoria' options={subCatOptions} onChange={handlerSubCategory} required/>
-        <InputField id="name" name='name' type='text' titlename='Nombre' required/>
+        <InputField id="name" name='name' type='text' titlename='Nombre' onChange={handlerInputChange} required/>
 
         {
           cropImgHandler
         }
 
-        <InputField id="price" name='price' type='number' titlename='Precio unitario' required/>
-        <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' required/>
+        <InputField id="price" name='price' type='number' titlename='Precio unitario' min="0" required/>
+        <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' onChange={handlerInputChange} min="0" required/>
         <InputField id="amount" name='amount' type='number' titlename='Cantidad' required/>
         <InputField id="description" name='description' type='text' titlename='Descripción' required/>
         <InputField id="colors" name='colors' type='text' titlename='Colores' required/>

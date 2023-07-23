@@ -10,7 +10,6 @@ interface productViewType {
   desktop?: boolean
   mainpicture?: string
   pictures?: string[]
-  name?: string
   price?: number | bigint
   descriptionHtml?: { __html: string | TrustedHTML } | undefined
   colors?: [{ color: string, name: string }]
@@ -22,15 +21,18 @@ export default function ProductPreview ({
   desktop = false,
   mainpicture = noPic,
   pictures = [],
-  name = 'Vista previa',
-  price = 0,
   descriptionHtml = { __html: '<p>Descripción del producto</p>' },
   colors,
   imagePreviewRef,
   completedCrop
 }: productViewType): JSX.Element {
-  const [category, subcategory] = useCreateProduct(state => [state.category, state.subcategory])
-  const formatedPrice = formatPrice(price)
+  const [
+    category,
+    subcategory,
+    name,
+    salePrice
+  ] = useCreateProduct(state => [state.category, state.subcategory, state.name, state.salePrice])
+  const formatedPrice = formatPrice(salePrice)
   const desktopView = desktop ? styles.desktop : ''
   let colorSelector = null
 
@@ -55,7 +57,6 @@ export default function ProductPreview ({
     })
   }
 
-  console.log({ imagePreviewRef })
   const previewImgOrCanvas = completedCrop === undefined
     ? <img src={noPic} alt='main image' className={styles.productimg}/>
     : <canvas

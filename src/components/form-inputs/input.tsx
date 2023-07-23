@@ -10,6 +10,7 @@ interface inputFieldType {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   accept?: string
   error?: string
+  min?: string
 }
 
 export default function InputField (props: inputFieldType): JSX.Element {
