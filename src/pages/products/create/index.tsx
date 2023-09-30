@@ -4,6 +4,7 @@ import useDebounceEffect from '../../../hooks/useDebounceEfect'
 import useCanvasPreview from '../../../hooks/useCanvasPreview'
 import useStore from '../../../store/useStore'
 import useCreateProduct from '../../../store/useCreateProduct'
+import Quill from 'quill'
 import useUserInterfaceStore, { modalSideViews } from '../../../store/useUserInterface'
 import PageLayout from '../../../layouts/page/pageLayout'
 import { InputField, SelectField } from '../../../components/form-inputs'
@@ -11,7 +12,9 @@ import Card from '../../../components/card'
 import ProductPreview from '../../../components/product-preview'
 import { AddIcon, CloseIcon } from '../../../icons'
 import src from '../../../assets/imgs/no-pic.jpeg'
+import 'quill/dist/quill.snow.css';
 import style from './create.module.css'
+import './quill-dark-theme.css'
 
 export default function CreateProduct (): JSX.Element {
   const emptySubCats = [{ value: '', name: '' }]
@@ -38,11 +41,25 @@ export default function CreateProduct (): JSX.Element {
     width: 250,
     height: 250
   })
+  const [description, setDescription] = useState('')
 
   useEffect(() => {
     const getCategories = async (): Promise<void> => {
       await updateCategories()
     }
+    
+    const editor = new Quill('#description', {
+      theme: 'snow',
+    });
+
+    editor.on('text-change', function(delta: string, n, source: string) {
+      if (source === 'user') {
+        const text = editor.getContents();
+        console.log(text)
+        setDescription(text)
+      }
+    });
+
     void getCategories()
   }, [])
 
@@ -199,7 +216,7 @@ export default function CreateProduct (): JSX.Element {
         <InputField id="price" name='price' type='number' titlename='Precio unitario' min="0" required/>
         <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' onChange={handlerInputChange} min="0" required/>
         <InputField id="amount" name='amount' type='number' titlename='Cantidad' required/>
-        <InputField id="description" name='description' type='text' titlename='Descripción' required/>
+        <div id="description"></div>
         <InputField id="colors" name='colors' type='text' titlename='Colores' required/>
         <button type='submit'>Crear</button>
       </form>

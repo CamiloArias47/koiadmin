@@ -1,0 +1,11 @@
+@media (prefers-color-scheme: dark) {
+    .ql-snow .ql-stroke{
+        stroke: var(--color-text-dark-primary);
+    }
+    .ql-snow .ql-picker{
+        color: var(--color-text-dark-primary);
+    }
+    .ql-snow .ql-picker-options{
+        background-color: var(--color-dark-primary);
+    }
+}
