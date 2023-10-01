@@ -41,7 +41,7 @@ export default function CreateProduct (): JSX.Element {
     width: 250,
     height: 250
   })
-  const [description, setDescription] = useState('')
+  const [description, setDescription] = useState<string | undefined>('')
 
   useEffect(() => {
     const getCategories = async (): Promise<void> => {
@@ -54,7 +54,8 @@ export default function CreateProduct (): JSX.Element {
 
     editor.on('text-change', function(delta: string, n, source: string) {
       if (source === 'user') {
-        const text = editor.getContents();
+        const descriptionBox = document.querySelector('#description .ql-editor')
+        const text = descriptionBox?.innerHTML
         console.log(text)
         setDescription(text)
       }
