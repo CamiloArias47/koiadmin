@@ -24,8 +24,16 @@ export default function CreateProduct (): JSX.Element {
     updateCategory,
     updateSubcategory,
     updateName,
-    updateSalePrice
-  ] = useCreateProduct(state => [state.updateCategory, state.updateSubcategory, state.updateName, state.updateSalePrice])
+    updateSalePrice,
+    updateDescription
+  ] = useCreateProduct(state => [
+    state.updateCategory,
+    state.updateSubcategory,
+    state.updateName,
+    state.updateSalePrice,
+    state.updateDescription
+  ])
+
   const [desktopView, setDesktopView] = useState(false)
   const [catOptions, setCatOptions] = useState<Array<{ value: string | undefined, name: string | undefined }>>([{ value: '', name: 'Cargando...' }])
   const [subCatOptions, setSubCatOptions] = useState<Array<{ value: string | undefined, name: string | undefined }>>(emptySubCats)
@@ -41,25 +49,23 @@ export default function CreateProduct (): JSX.Element {
     width: 250,
     height: 250
   })
-  const [description, setDescription] = useState<string | undefined>('')
 
   useEffect(() => {
     const getCategories = async (): Promise<void> => {
       await updateCategories()
     }
-    
-    const editor = new Quill('#description', {
-      theme: 'snow',
-    });
 
-    editor.on('text-change', function(delta: string, n, source: string) {
+    const editor = new Quill('#description', {
+      theme: 'snow'
+    })
+
+    editor.on('text-change', (_, __, source: string) => {
       if (source === 'user') {
         const descriptionBox = document.querySelector('#description .ql-editor')
-        const text = descriptionBox?.innerHTML
-        console.log(text)
-        setDescription(text)
+        const text = { __html: descriptionBox?.innerHTML ?? '' }
+        updateDescription(text)
       }
-    });
+    })
 
     void getCategories()
   }, [])
@@ -217,7 +223,7 @@ export default function CreateProduct (): JSX.Element {
         <InputField id="price" name='price' type='number' titlename='Precio unitario' min="0" required/>
         <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' onChange={handlerInputChange} min="0" required/>
         <InputField id="amount" name='amount' type='number' titlename='Cantidad' required/>
-        <div id="description"></div>
+        <div id="description" className={style.description}></div>
         <InputField id="colors" name='colors' type='text' titlename='Colores' required/>
         <button type='submit'>Crear</button>
       </form>

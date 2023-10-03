@@ -11,7 +11,6 @@ interface productViewType {
   mainpicture?: string
   pictures?: string[]
   price?: number | bigint
-  descriptionHtml?: { __html: string | TrustedHTML } | undefined
   colors?: [{ color: string, name: string }]
   imagePreviewRef: React.RefObject<HTMLCanvasElement>
   completedCrop: PixelCrop | undefined
@@ -21,7 +20,6 @@ export default function ProductPreview ({
   desktop = false,
   mainpicture = noPic,
   pictures = [],
-  descriptionHtml = { __html: '<p>Descripción del producto</p>' },
   colors,
   imagePreviewRef,
   completedCrop
@@ -30,8 +28,16 @@ export default function ProductPreview ({
     category,
     subcategory,
     name,
-    salePrice
-  ] = useCreateProduct(state => [state.category, state.subcategory, state.name, state.salePrice])
+    salePrice,
+    description
+  ] = useCreateProduct(state => [
+    state.category,
+    state.subcategory,
+    state.name,
+    state.salePrice,
+    state.description
+  ])
+
   const formatedPrice = formatPrice(salePrice)
   const desktopView = desktop ? styles.desktop : ''
   let colorSelector = null
@@ -93,8 +99,8 @@ export default function ProductPreview ({
       <div className={styles['product-details']}>
             <h1 className={styles.h1}>{ name }</h1>
             <span className={styles['product-price']}>{formatedPrice}</span>
-            <div className={styles['product-description']} dangerouslySetInnerHTML={descriptionHtml} />
-            <form className={styles['form-add']}>
+            <div className={styles['product-description']} dangerouslySetInnerHTML={description} />
+            <form className={styles['form-add']} onSubmit={(e) => { e.preventDefault() }}>
                 {
                   (colorSelector != null)
                     ? <div className={styles['form-add__top']}>{colorSelector}</div>
