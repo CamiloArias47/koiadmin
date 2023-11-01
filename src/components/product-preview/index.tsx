@@ -11,6 +11,7 @@ interface productViewType {
   mainpicture?: string
   pictures?: string[]
   price?: number | bigint
+  descriptionHtml?: { __html: string | TrustedHTML } | undefined
   colors?: [{ color: string, name: string }]
   imagePreviewRef: React.RefObject<HTMLCanvasElement>
   completedCrop: PixelCrop | undefined
@@ -20,6 +21,7 @@ export default function ProductPreview ({
   desktop = false,
   mainpicture = noPic,
   pictures = [],
+  descriptionHtml = { __html: '<p>Descripción del producto</p>' },
   colors,
   imagePreviewRef,
   completedCrop
@@ -31,13 +33,12 @@ export default function ProductPreview ({
     salePrice,
     description
   ] = useCreateProduct(state => [
-    state.category,
-    state.subcategory,
-    state.name,
+    state.category, 
+    state.subcategory, 
+    state.name, 
     state.salePrice,
     state.description
   ])
-
   const formatedPrice = formatPrice(salePrice)
   const desktopView = desktop ? styles.desktop : ''
   let colorSelector = null
