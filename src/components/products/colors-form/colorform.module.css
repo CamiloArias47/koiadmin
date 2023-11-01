@@ -1,0 +1,17 @@
+.colors-warpper{
+    border: 1px solid var(--color-input-border);
+    margin-top: 12px;
+    padding: 4px;
+    border-radius: 10px;
+    margin-bottom: 22px;
+}
+
+.colors-warpper__color{
+    display: flex;
+    flex-direction: row;
+    column-gap: 6px;
+}
+.colors__add-btn{
+    background-color: var(--color-secondary);
+    width: 100%;
+}

@@ -10,6 +10,7 @@ import PageLayout from '../../../layouts/page/pageLayout'
 import { InputField, SelectField } from '../../../components/form-inputs'
 import Card from '../../../components/card'
 import ProductPreview from '../../../components/product-preview'
+import ColorsForm from '../../../components/products/colors-form'
 import { AddIcon, CloseIcon } from '../../../icons'
 import src from '../../../assets/imgs/no-pic.jpeg'
 import 'quill/dist/quill.snow.css';
@@ -224,8 +225,10 @@ export default function CreateProduct (): JSX.Element {
         <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' onChange={handlerInputChange} min="0" required/>
         <InputField id="amount" name='amount' type='number' titlename='Cantidad' required/>
         <div id="description" className={style.description}></div>
-        <InputField id="colors" name='colors' type='text' titlename='Colores' required/>
-        <button type='submit'>Crear</button>
+
+        <ColorsForm/>
+
+        <button type='submit' className={style['create-product-btn']}>Crear</button>
       </form>
     </Card>
   )

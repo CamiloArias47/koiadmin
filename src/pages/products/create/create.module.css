@@ -106,3 +106,7 @@
 .description{
     height: 250px;
 }
+
+.create-product-btn{
+    width: 100%;
+}
