@@ -15,3 +15,31 @@
     background-color: var(--color-secondary);
     width: 100%;
 }
+.colors__label{
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 32px;
+}
+.colors__input{
+    display: flex;
+    flex-flow: column nowrap;
+    margin-bottom: 6px;
+    justify-content: center;
+}
+
+.colors__inputcolor{
+    height: 55px;
+    border-radius: 10px;
+}
+
+.colors__inputerrors{
+    height: 14px;
+    font-size: 12px;
+    color: var(--color-error);
+}
+
+@media (prefers-color-scheme: dark){
+    .colors__label {
+        color: var(--color-text-dark-secondary);
+    }
+}
