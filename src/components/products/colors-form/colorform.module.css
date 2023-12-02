@@ -10,11 +10,42 @@
     display: flex;
     flex-direction: row;
     column-gap: 6px;
+    justify-content: flex-end;
 }
+.colors-warpper__color:hover{
+    background-color: #3a3c4c;
+}
+
 .colors__add-btn{
     background-color: var(--color-secondary);
     width: 100%;
 }
+
+.colors__delete{
+    visibility: hidden;
+    width: 0px;
+    padding: 0;
+    transition: width ease 1s;
+    transition: padding ease 1s;
+    transition: visibility ease 1s;
+
+}
+.colors-warpper__color:hover .colors__delete{
+    visibility: visible;
+    padding: 0.6em 1.2em;
+    width: 20%;
+}
+
+.colors__inputs{
+    width: 100%;
+    display: flex;
+    transition: width ease 1s;
+}
+
+.colors-warpper__color:hover .colors__inputs{
+    width: 80%;
+}
+
 .colors__label{
     font-size: 18px;
     font-weight: 500;
