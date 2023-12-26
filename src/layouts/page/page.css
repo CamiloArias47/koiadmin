@@ -1,13 +1,14 @@
 .page-container{
     display: flex;
-    flex-flow: row nowrap;
+    flex-direction: column;
+    flex-wrap: nowrap;
     padding-top: 16px;
     align-items: stretch;
     column-gap: 24px;
 }
   
 .page-container__main{
-    width: 70%;
+    width: 100%;
 }
   
 .page-container__header{
@@ -18,5 +19,18 @@
 }
   
 .page-container__aux{
-    width: 30%;
+    width: 100%;
+}
+
+@media (min-width: 768px){
+    .page-container{
+        flex-direction: row;
+    }
+
+    .page-container__main{
+        width: 70%;
+    }
+    .page-container__aux{
+        width: 30%;
+    }
 }

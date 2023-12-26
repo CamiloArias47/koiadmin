@@ -13,7 +13,7 @@
     padding: 0px;
 }
 .card-preview-mobile{
-    width: 60%;
+    width: 100%;
     margin: auto;
     padding: 0;
 }
@@ -109,4 +109,16 @@
 
 .create-product-btn{
     width: 100%;
+}
+
+@media (min-width: 768px){
+    .card-preview-mobile{
+        width: 80%;
+    }
+}
+
+@media (min-width: 1024px){
+    .card-preview-mobile{
+        width: 60%;
+    }
 }
