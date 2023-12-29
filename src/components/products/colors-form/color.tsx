@@ -1,11 +1,19 @@
 import { InputField } from '../../form-inputs'
 import style from './colorform.module.css'
-export default function Color(){
+
+export default function Color({ index,del }: {index:number, del:(i:number)=>void}): JSX.Element {
+
+    const deleteColor = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault()
+        console.log("hablame perro", index)
+        del(index)
+    }
+
     return(
         <div className={style['colors-warpper__color']}>
             <div className={style['colors__wrap-delete']}>
                 <span></span>
-                <button className={style['colors__delete']}>X</button>
+                <button className={style['colors__delete']} onClick={deleteColor}>X</button>
             </div>
             <div className={style['colors__inputs']}>
                 <InputField id="colorName" name='colorName[]' type='text' titlename='Nombre' required/>
