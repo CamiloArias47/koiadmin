@@ -12,9 +12,11 @@ import Card from '../../../components/card'
 import ProductPreview from '../../../components/product-preview'
 import ColorsForm from '../../../components/products/colors-form'
 import { AddIcon, CloseIcon } from '../../../icons'
+import { saveProduct } from '../../../services/firestore/products'
 import src from '../../../assets/imgs/no-pic.jpeg'
 import 'quill/dist/quill.snow.css';
 import style from './create.module.css'
+import stylesInputs from '../../../components/form-inputs/inputfield.module.css'
 import './quill-dark-theme.css'
 
 export default function CreateProduct (): JSX.Element {
@@ -174,6 +176,13 @@ export default function CreateProduct (): JSX.Element {
     setCompletedCrop(undefined)
   }
 
+  const createProduct = (e): void => {
+    e.preventDefault()
+    const fields = Object.fromEntries(new window.FormData(e.target))
+    console.log([fields])
+    //saveProduct()
+  }
+
   const cropImgHandler = imgSrc === src
     ? <div className={style['image-handler']}>
           <div className={style['image-handler__help-text']}>
@@ -207,7 +216,7 @@ export default function CreateProduct (): JSX.Element {
 
   const form = (
     <Card>
-      <form className={style['product-form']}>
+      <form className={style['product-form']} onSubmit={createProduct}>
         <div className={style['product-form__category']}>
           <SelectField id="category" name='category' type='text' titlename='Categoria' options={catOptions} onChange={handlerCategory} required/>
           <button type="button" className={style['product-form__category__btn']} onClick={handlerAddCategory}>
@@ -224,11 +233,17 @@ export default function CreateProduct (): JSX.Element {
         <InputField id="price" name='price' type='number' titlename='Precio unitario' min="0" required/>
         <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' onChange={handlerInputChange} min="0" required/>
         <InputField id="amount" name='amount' type='number' titlename='Cantidad' required/>
+        <InputField id="expire" name='expire' type='date' titlename='Fecha de vencimiento'/>
+        <label
+          className={stylesInputs.input__label}
+        >
+          Descripción
+        </label>
         <div id="description" className={style.description}></div>
 
         <ColorsForm/>
 
-        <button type='submit' className={style['create-product-btn']}>Crear</button>
+        <button type='submit' className={style['create-product-btn']} >Crear</button>
       </form>
     </Card>
   )
