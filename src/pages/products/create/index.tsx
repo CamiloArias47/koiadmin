@@ -180,6 +180,33 @@ export default function CreateProduct (): JSX.Element {
     e.preventDefault()
     const fields = Object.fromEntries(new window.FormData(e.target))
     console.log([fields])
+    const colors : {name:string, amount:number, color:string}[] = []
+    for(const productIndex in fields){
+      const colorAmount = productIndex.indexOf('colorAmount')
+      const colorName = productIndex.indexOf('colorName')
+      const colorCode = productIndex.indexOf('colors[')
+      if(colorAmount >= 0){
+        let amountPos : string | number = productIndex.substring(12,13)
+        amountPos = parseInt(amountPos)
+        colors[amountPos] = {...colors[amountPos] , 'amount' : parseInt(fields[productIndex].toString())}
+        delete fields[productIndex]
+      }
+      if(colorName >= 0){
+        let namePos : string | number = productIndex.substring(10,11)
+        namePos = parseInt(namePos)
+        colors[namePos] = {...colors[namePos] , 'name' : fields[productIndex].toString()}
+        delete fields[productIndex]
+      }
+      if(colorCode >= 0){
+        let colorPos : string | number = productIndex.substring(7,8)
+        colorPos = parseInt(colorPos)
+        colors[colorPos] = {...colors[colorPos] , 'color' : fields[productIndex].toString()}
+        delete fields[productIndex]
+      }
+    }
+
+    fields.colors = colors
+    console.log({fields})
     //saveProduct()
   }
 
