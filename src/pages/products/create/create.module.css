@@ -55,6 +55,11 @@
     overflow: hidden;
     position: relative;
 }
+.image-handler--secondary{
+    width: 85px;
+    height: 85px;
+}
+
 .image-handler:hover{
     border: 1px dashed var(--color-input-border);
 }
@@ -74,6 +79,14 @@
     top: 36%;
     display: flex;
     flex-direction: column;
+}
+.image-handler__help-text--secondary {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
 }
 .image-handler__help-text--title{
     font-size: 22px;
@@ -102,6 +115,9 @@
 }
 .image-croper__img{
     width: 100%;
+}
+.secondary-pictures{
+    padding: 14px 0px;
 }
 .description{
     height: 250px;

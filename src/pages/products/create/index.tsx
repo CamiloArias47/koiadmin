@@ -257,6 +257,15 @@ export default function CreateProduct (): JSX.Element {
           cropImgHandler
         }
 
+        <div className={style['secondary-pictures']}>
+          <div className={style['image-handler']+' '+style['image-handler--secondary']}>
+            <div className={style['image-handler__help-text--secondary']}>
+              <span className={style['image-handler__help-text--secondary']}>Agregar foto</span>
+            </div>
+            <input type='file' name="extraPicture" id="extraPicture" onChange={onSelectFile}/>
+          </div>
+        </div>
+
         <InputField id="price" name='price' type='number' titlename='Precio unitario' min="0" required/>
         <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' onChange={handlerInputChange} min="0" required/>
         <InputField id="amount" name='amount' type='number' titlename='Cantidad' required/>
