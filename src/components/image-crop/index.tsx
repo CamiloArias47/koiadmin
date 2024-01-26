@@ -13,9 +13,10 @@ interface ImageCropInterface {
     cropPreview? : React.RefObject<HTMLCanvasElement>
     completedCrop: PixelCrop | undefined
     setCompletedCrop: React.Dispatch<React.SetStateAction<PixelCrop | undefined>>
+    withControls?: boolean 
 }
 
-export default function ImageCrop ({src, quitImg, cropPreview, completedCrop, setCompletedCrop} : ImageCropInterface): JSX.Element {
+export default function ImageCrop ({src, quitImg, cropPreview, completedCrop, setCompletedCrop, withControls = false} : ImageCropInterface): JSX.Element {
     const imgSrc = src ? src : srcDefault
     const imgRef = useRef<HTMLImageElement>(null)
     //const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
@@ -28,25 +29,37 @@ export default function ImageCrop ({src, quitImg, cropPreview, completedCrop, se
     })
 
     useDebounceEffect(
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        async (): Promise<void> => {
-          if (
-            (completedCrop !== undefined) &&
-            (Boolean(completedCrop?.width)) &&
-            (Boolean(completedCrop?.height)) &&
-            (imgRef.current != null) &&
-            (cropPreview !== undefined && cropPreview.current != null)
-          ) {
-            void useCanvasPreview(
-              imgRef.current,
-              cropPreview.current,
-              completedCrop
-            )
-          }
-        },
-        100,
-        [completedCrop]
-      )
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      async (): Promise<void> => {
+        if (
+          (completedCrop !== undefined) &&
+          (Boolean(completedCrop?.width)) &&
+          (Boolean(completedCrop?.height)) &&
+          (imgRef.current != null) &&
+          (cropPreview !== undefined && cropPreview.current != null)
+        ) {
+          void useCanvasPreview(
+            imgRef.current,
+            cropPreview.current,
+            completedCrop
+          )
+        }
+      },
+      100,
+      [completedCrop]
+    )
+
+    const controls = withControls 
+      ? <div>
+            <button>Select picture</button>
+            <button>Recortar</button>
+        </div> 
+      : <div className={style['image-croper__cancel']}>
+          Cancelar (Seleccionar otra imagen)
+          <button className={style['image-croper__cancel-btn']} onClick={quitImg}>
+            <CloseIcon width="10"/>
+          </button>
+        </div>
 
     return (
       <div className={style['image-croper']}>
@@ -64,12 +77,7 @@ export default function ImageCrop ({src, quitImg, cropPreview, completedCrop, se
             className={style['image-croper__img']}
           />
         </ReactCrop>
-        <div className={style['image-croper__cancel']}>
-          Cancelar (Seleccionar otra imagen)
-          <button className={style['image-croper__cancel-btn']} onClick={quitImg}>
-            <CloseIcon width="10"/>
-          </button>
-        </div>
+        { controls }
       </div>
     )
 }

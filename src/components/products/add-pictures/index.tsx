@@ -17,12 +17,6 @@ export default function AddImage(){
 
     return(
         <>
-            <ImageCrop 
-                src={imgSrc} 
-                quitImg={deleteImage}
-                setCompletedCrop={setCompletedCrop}
-                completedCrop={completedCrop}
-            />
             <div className={style['secondary-pictures']}>
                 <div className={dropdragstyles['image-handler']+' '+dropdragstyles['image-handler--secondary']}>
                     <div className={dropdragstyles['image-handler__help-text--secondary']}>
@@ -31,6 +25,13 @@ export default function AddImage(){
                     <input type='file' name="extraPicture" id="extraPicture" onChange={onSelectFile}/>
                 </div>
             </div>
+            <ImageCrop 
+                src={imgSrc} 
+                quitImg={deleteImage}
+                setCompletedCrop={setCompletedCrop}
+                completedCrop={completedCrop}
+                withControls
+            />
         </>
     )
 }

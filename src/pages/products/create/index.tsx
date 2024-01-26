@@ -97,7 +97,11 @@ export default function CreateProduct (): JSX.Element {
   const preview = (
     <Card className={classPreviewDevice}>
       <div className={style.preview}>
-        <ProductPreview desktop={desktopView} imagePreviewRef={imagePreviewRef} completedCrop={completedCrop}/>
+        <ProductPreview 
+          desktop={desktopView} 
+          imagePreviewRef={imagePreviewRef} 
+          completedCrop={completedCrop}
+        />
       </div>
     </Card>
   )
