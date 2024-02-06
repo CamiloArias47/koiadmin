@@ -14,9 +14,10 @@ interface ImageCropInterface {
     completedCrop: PixelCrop | undefined
     setCompletedCrop: React.Dispatch<React.SetStateAction<PixelCrop | undefined>>
     withControls?: boolean 
+    close? : () => void 
 }
 
-export default function ImageCrop ({src, quitImg, cropPreview, completedCrop, setCompletedCrop, withControls = false} : ImageCropInterface): JSX.Element {
+export default function ImageCrop ({src, quitImg, cropPreview, completedCrop, setCompletedCrop, withControls = false, close} : ImageCropInterface): JSX.Element {
     const imgSrc = src ? src : srcDefault
     const imgRef = useRef<HTMLImageElement>(null)
     //const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
@@ -53,6 +54,11 @@ export default function ImageCrop ({src, quitImg, cropPreview, completedCrop, se
       ? <div>
             <button>Select picture</button>
             <button>Recortar</button>
+            {
+              close ?
+                <button onClick={close}>Cancelar</button>
+              : null
+            }
         </div> 
       : <div className={style['image-croper__cancel']}>
           Cancelar (Seleccionar otra imagen)
