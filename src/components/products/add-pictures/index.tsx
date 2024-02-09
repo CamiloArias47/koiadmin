@@ -1,4 +1,4 @@
-import { MouseEventHandler, useState } from 'react'
+import { RefObject, useRef, useState } from 'react'
 import useReadFile from '../../../hooks/useReadFile'
 import ImageCrop from '../../../components/image-crop'
 import { type PixelCrop } from 'react-image-crop'
@@ -6,7 +6,11 @@ import src from '../../../assets/imgs/no-pic.jpeg'
 import style from './addpictures.module.css'
 import dropdragstyles from '../../../pages/products/create/dropanddrag.module.css'
 
-export default function AddImage(){
+interface AddImage {
+    previewRef: RefObject<HTMLCanvasElement>
+}
+
+export default function AddImage({previewRef}: AddImage){
 
     const { imgSrc, onSelectFile, quitImage } = useReadFile({srcCustom:src})
     const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
@@ -37,6 +41,7 @@ export default function AddImage(){
                         quitImg={deleteImage}
                         setCompletedCrop={setCompletedCrop}
                         completedCrop={completedCrop}
+                        cropPreview={previewRef}
                         withControls
                         close={toogleCroper}
                     />

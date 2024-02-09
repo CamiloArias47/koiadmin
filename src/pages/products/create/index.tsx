@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, RefObject } from 'react'
 import { type PixelCrop } from 'react-image-crop'
 import useStore from '../../../store/useStore'
 import useCreateProduct from '../../../store/useCreateProduct'
@@ -46,6 +46,18 @@ export default function CreateProduct (): JSX.Element {
   const { imgSrc, onSelectFile, quitImage } = useReadFile({srcCustom:src})
   const imagePreviewRef = useRef<HTMLCanvasElement>(null)
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
+  const imagePreviewRef1 = useRef<HTMLCanvasElement>(null)
+  const imagePreviewRef2 = useRef<HTMLCanvasElement>(null)
+  const imagePreviewRef3 = useRef<HTMLCanvasElement>(null)
+  const imagePreviewRef4 = useRef<HTMLCanvasElement>(null)
+  const imagePreviewRef5 = useRef<HTMLCanvasElement>(null)
+  const imagesPreviewRef = [
+    imagePreviewRef1,
+    imagePreviewRef2,
+    imagePreviewRef3,
+    imagePreviewRef4,
+    imagePreviewRef5
+  ]
 
 
   useEffect(() => {
@@ -100,6 +112,7 @@ export default function CreateProduct (): JSX.Element {
         <ProductPreview 
           desktop={desktopView} 
           imagePreviewRef={imagePreviewRef} 
+          imagesPreviewRef={imagesPreviewRef}
           completedCrop={completedCrop}
         />
       </div>
@@ -209,7 +222,7 @@ export default function CreateProduct (): JSX.Element {
           cropImgHandler
         }
 
-        <AddImage/>
+        <AddImage previewRef={imagePreviewRef1}/>
 
         <InputField id="price" name='price' type='number' titlename='Precio unitario' min="0" required/>
         <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' onChange={handlerInputChange} min="0" required/>

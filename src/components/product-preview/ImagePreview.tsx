@@ -1,22 +1,24 @@
+import { RefObject } from "react"
+
 interface imagepreviewType {
   pics?: string[]
   name?: string
+  canvasPreview?: RefObject<HTMLCanvasElement>[]
 }
 
-export default function ImagePreview ({ pics = [], name = '' }: imagepreviewType): JSX.Element {
+export default function ImagePreview ({ pics = [], name = '', canvasPreview = [] }: imagepreviewType): JSX.Element {
+  console.log({canvasPreview})
   return (
     <div className='preview'>
         {
-          pics.map(pic => {
+          canvasPreview.map((previewref, index) => {
             return <button
-                      key={pic}
+                      key={name+'-'+index}
                       className="preview__element active"
                     >
-                        <img
-                            src={pic}
-                            alt={name}
-                            width="42"
-                            height="42"
+                        <canvas
+                          ref={previewref}
+                          style={{ objectFit: 'contain' }}
                         />
                     </button>
           })
