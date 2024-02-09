@@ -205,14 +205,40 @@
     padding-right:0;
 }
 
-.preview__element img{
+.preview__element canvas{
     aspect-ratio: 1;
 }
-.preview__element img{
+.preview__element canvas{
     border: 3px solid #efefef !important;
+    position: absolute;
+    inset: 0px;
+    box-sizing: border-box;
+    padding: 0px;
+    border: none;
+    margin: auto;
+    display: block;
+    width: 0px;
+    height: 0px;
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 100%;
+    max-height: 100%;
 }
-.preview__element.active img{
+.preview__element.active canvas{
     border: 3px solid #cf9696 !important;
+}
+.preview__element span{
+    box-sizing: border-box;
+    display: block;
+    overflow: hidden;
+    width: initial;
+    height: initial;
+    background: none;
+    opacity: 1;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    position: relative;
 }
 
 .product-colors{
