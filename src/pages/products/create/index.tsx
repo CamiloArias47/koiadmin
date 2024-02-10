@@ -46,6 +46,8 @@ export default function CreateProduct (): JSX.Element {
   const { imgSrc, onSelectFile, quitImage } = useReadFile({srcCustom:src})
   const imagePreviewRef = useRef<HTMLCanvasElement>(null)
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
+  const [imgsPreviewRef, setImgsPreviewRef] = useState<RefObject<HTMLCanvasElement>[]>([])
+  const previewCount = useRef(0)
   const imagePreviewRef1 = useRef<HTMLCanvasElement>(null)
   const imagePreviewRef2 = useRef<HTMLCanvasElement>(null)
   const imagePreviewRef3 = useRef<HTMLCanvasElement>(null)
@@ -112,12 +114,18 @@ export default function CreateProduct (): JSX.Element {
         <ProductPreview 
           desktop={desktopView} 
           imagePreviewRef={imagePreviewRef} 
-          imagesPreviewRef={imagesPreviewRef}
+          imagesPreviewRef={imgsPreviewRef}
           completedCrop={completedCrop}
         />
       </div>
     </Card>
   )
+
+  const addImage = () => {
+    const newRef = imagePreviewRef[previewCount.current]
+    setImgsPreviewRef([...imgsPreviewRef, newRef])
+    previewCount.current = previewCount.current + 1
+  }
 
   const handlerCategory = (id: string, cateName: string): void => {
     const subCatOfCatSelected = allcategories.find(cat => cat.id === id)
@@ -222,7 +230,11 @@ export default function CreateProduct (): JSX.Element {
           cropImgHandler
         }
 
-        <AddImage previewRef={imagePreviewRef1}/>
+        {
+          imgsPreviewRef?.map(previeRef => <AddImage key={previewCount.current} previewRef={previeRef}/>)
+        }
+  
+        <button onClick={addImage}>Add imagge</button>
 
         <InputField id="price" name='price' type='number' titlename='Precio unitario' min="0" required/>
         <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' onChange={handlerInputChange} min="0" required/>

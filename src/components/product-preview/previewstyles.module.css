@@ -210,7 +210,7 @@
 }
 .preview__element canvas{
     border: 3px solid #efefef !important;
-    position: absolute;
+    position: relative;
     inset: 0px;
     box-sizing: border-box;
     padding: 0px;
@@ -218,7 +218,7 @@
     margin: auto;
     display: block;
     width: 0px;
-    height: 0px;
+    height: auto;
     min-width: 100%;
     max-width: 100%;
     min-height: 100%;
@@ -226,19 +226,6 @@
 }
 .preview__element.active canvas{
     border: 3px solid #cf9696 !important;
-}
-.preview__element span{
-    box-sizing: border-box;
-    display: block;
-    overflow: hidden;
-    width: initial;
-    height: initial;
-    background: none;
-    opacity: 1;
-    border: 0px;
-    margin: 0px;
-    padding: 0px;
-    position: relative;
 }
 
 .product-colors{

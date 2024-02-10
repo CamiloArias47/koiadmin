@@ -96,7 +96,11 @@ export default function ProductPreview ({
             </div>
             {
               imagesPreviewRef.length > 0
-                ? <ImagePreview pics={[mainpicture, ...pictures]} name={name} canvasPreview={imagesPreviewRef}/>
+                ? <ImagePreview 
+                    mainPicture={mainpicture}
+                    pics={pictures} 
+                    name={name} 
+                    canvasPreview={imagesPreviewRef}/>
                 : ''
             }
       </div>

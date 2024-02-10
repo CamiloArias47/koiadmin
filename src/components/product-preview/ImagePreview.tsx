@@ -2,6 +2,7 @@ import { RefObject } from "react"
 import styles from './previewstyles.module.css'
 
 interface imagepreviewType {
+  mainPicture?: string
   pics?: string[]
   name?: string
   canvasPreview?: RefObject<HTMLCanvasElement>[]
@@ -17,12 +18,12 @@ export default function ImagePreview ({ pics = [], name = '', canvasPreview = []
                       key={name+'-'+index}
                       className={styles.preview__element+" "+ styles.active}
                     >
-                        <span>
+                        
                           <canvas
                             ref={previewref}
                             style={{ objectFit: 'contain' }}
                           />
-                        </span>
+                        
                     </button>
           })
         }
