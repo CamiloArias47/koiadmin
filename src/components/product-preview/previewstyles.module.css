@@ -194,6 +194,11 @@
     width: 16.5%;
     padding: .1rem;
     border: 0;
+    border-radius: 0px;
+    background-color: #ececec;
+}
+.preview__element:focus{
+    outline: none;
 }
 .preview__element:hover{
     cursor:pointer;
@@ -226,7 +231,7 @@
     min-height: 100%;
     max-height: 100%;
 }
-.preview__element.active img
+.preview__element.active img,
 .preview__element.active canvas{
     border: 3px solid #cf9696 !important;
 }
@@ -308,4 +313,11 @@
 }
 .desktop .preview__element:last-child{
     padding-right:0.8rem;
+}
+
+@media (prefers-color-scheme: dark){
+    button.preview__element:hover,
+    button.preview__element {
+        background-color: #ececec;
+    }
 }

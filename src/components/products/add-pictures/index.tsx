@@ -29,13 +29,13 @@ export default function AddImage({previewRef}: AddImage){
             <div className={style['secondary-pictures']}>
                 <div className={dropdragstyles['image-handler']+' '+dropdragstyles['image-handler--secondary']}>
                     <div className={dropdragstyles['image-handler__help-text--secondary']}>
-                    <span className={dropdragstyles['image-handler__help-text--secondary']} onClick={toogleCroper}>Agregar foto </span>
+                        <span className={dropdragstyles['image-handler__help-text--secondary']}>Seleciona una foto</span>
+                        <input type='file' name="extraPicture" id="extraPicture" onChange={onSelectFile}/>
                     </div>
                 </div>
-                <input type='file' name="extraPicture" id="extraPicture" onChange={onSelectFile}/>
             </div>
             { 
-                showCroper ?
+                imgSrc !== src ?
                     <ImageCrop 
                         src={imgSrc} 
                         quitImg={deleteImage}

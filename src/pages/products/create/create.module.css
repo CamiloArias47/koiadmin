@@ -48,6 +48,17 @@
     margin-bottom: 20px;
     padding: 0;
 }
+.extra-pictures{
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    padding: 14px 0px;
+}
+.extra-picture__add-btn{
+    width: 85px;
+    height: 85px;
+    padding: 0;
+}
 .description{
     height: 250px;
 }

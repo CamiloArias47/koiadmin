@@ -23,7 +23,7 @@ export default function ImagePreview ({ mainPicture, pics = [], name = '', canva
           canvasPreview.map(previewref => {
             return <button
                       key={previewref.pos}
-                      className={styles.preview__element+" "+ styles.active}
+                      className={styles.preview__element}
                     >
                       <canvas
                         ref={previewref.ref}

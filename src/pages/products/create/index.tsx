@@ -233,16 +233,17 @@ export default function CreateProduct (): JSX.Element {
         {
           cropImgHandler
         }
+        <div className={style['extra-pictures']}>
+          {
+            imgsPreviewRef?.map(previeRef => <AddImage key={previeRef.pos} previewRef={previeRef.ref}/> )
+          }
 
-        {
-          imgsPreviewRef?.map(previeRef => <AddImage key={previeRef.pos} previewRef={previeRef.ref}/> )
-        }
-
-        {
-          quitAddMorePics.current 
-            ? null 
-            : <button onClick={addImage}>Add imagge</button>
-        }
+          {
+            quitAddMorePics.current 
+              ? null 
+              : <button onClick={addImage} className={style['extra-picture__add-btn']}>Add imagge</button>
+          }
+        </div>
 
         <InputField id="price" name='price' type='number' titlename='Precio unitario' min="0" required/>
         <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' onChange={handlerInputChange} min="0" required/>
