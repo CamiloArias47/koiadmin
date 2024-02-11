@@ -125,7 +125,7 @@ export default function CreateProduct (): JSX.Element {
 
   const addImage = useCallback((e) => {
     e.preventDefault()
-    const newRef = imagePreviewRef[previewCount.current]
+    const newRef = imagesPreviewRef[previewCount.current]
     setImgsPreviewRef([...imgsPreviewRef, {pos:previewCount.current, ref:newRef}])
     previewCount.current = previewCount.current + 1
     if(previewCount.current === 5) quitAddMorePics.current = true
@@ -235,9 +235,7 @@ export default function CreateProduct (): JSX.Element {
         }
 
         {
-          imgsPreviewRef?.map(previeRef => {
-            return <AddImage key={previeRef.pos} previewRef={previeRef.ref}/>
-          })
+          imgsPreviewRef?.map(previeRef => <AddImage key={previeRef.pos} previewRef={previeRef.ref}/> )
         }
 
         {

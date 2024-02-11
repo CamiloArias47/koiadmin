@@ -13,9 +13,12 @@ interface imagepreviewType {
   canvasPreview?: canvasPreview[]
 }
 
-export default function ImagePreview ({ pics = [], name = '', canvasPreview = [] }: imagepreviewType): JSX.Element {
+export default function ImagePreview ({ mainPicture, pics = [], name = '', canvasPreview = [] }: imagepreviewType): JSX.Element {
   return (
     <div className={styles.preview}>
+        <button className={styles.preview__element+" "+ styles.active}>
+          <img src={mainPicture}/>
+        </button>
         {
           canvasPreview.map(previewref => {
             return <button
