@@ -5,7 +5,7 @@ import { ShoppingBagIcon, HomeIcon } from '../../icons'
 import { formatPrice } from '../../utils'
 import { type PixelCrop } from 'react-image-crop'
 import styles from './previewstyles.module.css'
-import { RefObject } from 'react'
+import { canvasPreview } from '../product-preview/ImagePreview'
 
 interface productViewType {
   desktop?: boolean
@@ -16,7 +16,7 @@ interface productViewType {
   colors?: [{ color: string, name: string }]
   imagePreviewRef: React.RefObject<HTMLCanvasElement>
   completedCrop: PixelCrop | undefined
-  imagesPreviewRef?: {pos: number, ref:RefObject<HTMLCanvasElement>}[]
+  imagesPreviewRef?: canvasPreview[]
 }
 
 export default function ProductPreview ({

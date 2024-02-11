@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, RefObject, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { type PixelCrop } from 'react-image-crop'
 import useStore from '../../../store/useStore'
 import useCreateProduct from '../../../store/useCreateProduct'
@@ -10,6 +10,7 @@ import Card from '../../../components/card'
 import ProductPreview from '../../../components/product-preview'
 import ColorsForm from '../../../components/products/colors-form'
 import AddImage from '../../../components/products/add-pictures'
+import { canvasPreview } from '../../../components/product-preview/ImagePreview'
 import { AddIcon } from '../../../icons'
 import { saveProduct } from '../../../services/firestore/products'
 import useReadFile from '../../../hooks/useReadFile'
@@ -46,7 +47,7 @@ export default function CreateProduct (): JSX.Element {
   const { imgSrc, onSelectFile, quitImage } = useReadFile({srcCustom:src})
   const imagePreviewRef = useRef<HTMLCanvasElement>(null)
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
-  const [imgsPreviewRef, setImgsPreviewRef] = useState<{pos: number, ref:RefObject<HTMLCanvasElement>}[]>([])
+  const [imgsPreviewRef, setImgsPreviewRef] = useState<canvasPreview[]>([])
   const previewCount = useRef(0)
   const quitAddMorePics = useRef(false)
   const imagePreviewRef1 = useRef<HTMLCanvasElement>(null)

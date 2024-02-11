@@ -1,11 +1,16 @@
 import { RefObject } from "react"
 import styles from './previewstyles.module.css'
 
+export interface canvasPreview {
+  pos: number
+  ref: RefObject<HTMLCanvasElement>
+}
+
 interface imagepreviewType {
   mainPicture?: string
   pics?: string[]
   name?: string
-  canvasPreview?: {pos: number, ref:RefObject<HTMLCanvasElement>}[]
+  canvasPreview?: canvasPreview[]
 }
 
 export default function ImagePreview ({ pics = [], name = '', canvasPreview = [] }: imagepreviewType): JSX.Element {
