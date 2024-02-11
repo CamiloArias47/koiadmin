@@ -5,25 +5,22 @@ interface imagepreviewType {
   mainPicture?: string
   pics?: string[]
   name?: string
-  canvasPreview?: RefObject<HTMLCanvasElement>[]
+  canvasPreview?: {pos: number, ref:RefObject<HTMLCanvasElement>}[]
 }
 
 export default function ImagePreview ({ pics = [], name = '', canvasPreview = [] }: imagepreviewType): JSX.Element {
-  console.log({canvasPreview})
   return (
     <div className={styles.preview}>
         {
-          canvasPreview.map((previewref, index) => {
+          canvasPreview.map(previewref => {
             return <button
-                      key={name+'-'+index}
+                      key={previewref.pos}
                       className={styles.preview__element+" "+ styles.active}
                     >
-                        
-                          <canvas
-                            ref={previewref}
-                            style={{ objectFit: 'contain' }}
-                          />
-                        
+                      <canvas
+                        ref={previewref.ref}
+                        style={{ objectFit: 'contain' }}
+                      />   
                     </button>
           })
         }

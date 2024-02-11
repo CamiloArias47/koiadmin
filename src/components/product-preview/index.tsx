@@ -16,7 +16,7 @@ interface productViewType {
   colors?: [{ color: string, name: string }]
   imagePreviewRef: React.RefObject<HTMLCanvasElement>
   completedCrop: PixelCrop | undefined
-  imagesPreviewRef?: RefObject<HTMLCanvasElement>[]
+  imagesPreviewRef?: {pos: number, ref:RefObject<HTMLCanvasElement>}[]
 }
 
 export default function ProductPreview ({

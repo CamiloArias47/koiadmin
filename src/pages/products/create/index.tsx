@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, RefObject } from 'react'
+import { useState, useEffect, useRef, RefObject, useCallback } from 'react'
 import { type PixelCrop } from 'react-image-crop'
 import useStore from '../../../store/useStore'
 import useCreateProduct from '../../../store/useCreateProduct'
@@ -46,8 +46,9 @@ export default function CreateProduct (): JSX.Element {
   const { imgSrc, onSelectFile, quitImage } = useReadFile({srcCustom:src})
   const imagePreviewRef = useRef<HTMLCanvasElement>(null)
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
-  const [imgsPreviewRef, setImgsPreviewRef] = useState<RefObject<HTMLCanvasElement>[]>([])
+  const [imgsPreviewRef, setImgsPreviewRef] = useState<{pos: number, ref:RefObject<HTMLCanvasElement>}[]>([])
   const previewCount = useRef(0)
+  const quitAddMorePics = useRef(false)
   const imagePreviewRef1 = useRef<HTMLCanvasElement>(null)
   const imagePreviewRef2 = useRef<HTMLCanvasElement>(null)
   const imagePreviewRef3 = useRef<HTMLCanvasElement>(null)
@@ -121,11 +122,13 @@ export default function CreateProduct (): JSX.Element {
     </Card>
   )
 
-  const addImage = () => {
+  const addImage = useCallback((e) => {
+    e.preventDefault()
     const newRef = imagePreviewRef[previewCount.current]
-    setImgsPreviewRef([...imgsPreviewRef, newRef])
+    setImgsPreviewRef([...imgsPreviewRef, {pos:previewCount.current, ref:newRef}])
     previewCount.current = previewCount.current + 1
-  }
+    if(previewCount.current === 5) quitAddMorePics.current = true
+  },[previewCount.current])
 
   const handlerCategory = (id: string, cateName: string): void => {
     const subCatOfCatSelected = allcategories.find(cat => cat.id === id)
@@ -231,10 +234,16 @@ export default function CreateProduct (): JSX.Element {
         }
 
         {
-          imgsPreviewRef?.map(previeRef => <AddImage key={previewCount.current} previewRef={previeRef}/>)
+          imgsPreviewRef?.map(previeRef => {
+            return <AddImage key={previeRef.pos} previewRef={previeRef.ref}/>
+          })
         }
-  
-        <button onClick={addImage}>Add imagge</button>
+
+        {
+          quitAddMorePics.current 
+            ? null 
+            : <button onClick={addImage}>Add imagge</button>
+        }
 
         <InputField id="price" name='price' type='number' titlename='Precio unitario' min="0" required/>
         <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' onChange={handlerInputChange} min="0" required/>
