@@ -48,8 +48,9 @@ export default function CreateProduct (): JSX.Element {
   const imagePreviewRef = useRef<HTMLCanvasElement>(null)
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>()
   const [imgsPreviewRef, setImgsPreviewRef] = useState<canvasPreview[]>([])
-  const previewCount = useRef(0)
-  const quitAddMorePics = useRef(false)
+  const cropExtraImg = useRef(0)
+  const currentCropExtaImgs = useRef(0)
+  const [quitAddMorePics, setQuitAddMorePics] = useState(false)
   const imagePreviewRef1 = useRef<HTMLCanvasElement>(null)
   const imagePreviewRef2 = useRef<HTMLCanvasElement>(null)
   const imagePreviewRef3 = useRef<HTMLCanvasElement>(null)
@@ -125,11 +126,21 @@ export default function CreateProduct (): JSX.Element {
 
   const addImage = useCallback((e) => {
     e.preventDefault()
-    const newRef = imagesPreviewRef[previewCount.current]
-    setImgsPreviewRef([...imgsPreviewRef, {pos:previewCount.current, ref:newRef}])
-    previewCount.current = previewCount.current + 1
-    if(previewCount.current === 5) quitAddMorePics.current = true
-  },[previewCount.current])
+    const newRef = imagesPreviewRef[currentCropExtaImgs.current]
+    setImgsPreviewRef([...imgsPreviewRef, {pos:cropExtraImg.current, ref:newRef}])
+    cropExtraImg.current = cropExtraImg.current + 1
+    currentCropExtaImgs.current = currentCropExtaImgs.current + 1
+    if(currentCropExtaImgs.current === 5) setQuitAddMorePics(true)
+  },[cropExtraImg.current])
+
+  const quitExtraImg = (pos: number) => {
+    currentCropExtaImgs.current = currentCropExtaImgs.current - 1
+    const newPrevElem = imgsPreviewRef.filter(prev => prev.pos !== pos)
+    setImgsPreviewRef([...newPrevElem])
+    const refToQuit = imagesPreviewRef.splice(pos,1)[0]
+    imagesPreviewRef.push(refToQuit)
+    if(currentCropExtaImgs.current < 5) setQuitAddMorePics(false)
+  }
 
   const handlerCategory = (id: string, cateName: string): void => {
     const subCatOfCatSelected = allcategories.find(cat => cat.id === id)
@@ -235,10 +246,15 @@ export default function CreateProduct (): JSX.Element {
         }
         <div className={style['extra-pictures']}>
           {
-            imgsPreviewRef?.map(previeRef => <AddImage key={previeRef.pos} previewRef={previeRef.ref}/> )
+            imgsPreviewRef?.map(previeRef => <AddImage 
+              key={previeRef.pos} 
+              previewRef={previeRef.ref} 
+              posPreview={previeRef.pos}
+              quit={quitExtraImg}
+              /> )
           }
           {
-            quitAddMorePics.current 
+            quitAddMorePics 
               ? null 
               : <button onClick={addImage} className={style['extra-picture__add-btn']}>Agregar imagen</button>
           }
