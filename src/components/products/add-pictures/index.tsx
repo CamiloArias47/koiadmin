@@ -27,9 +27,9 @@ export default function AddImage({previewRef}: AddImage){
     return(
         <>
             <div className={style['secondary-pictures']}>
-                <div className={dropdragstyles['image-handler']+' '+dropdragstyles['image-handler--secondary']}>
-                    <div className={dropdragstyles['image-handler__help-text--secondary']}>
-                        <span className={dropdragstyles['image-handler__help-text--secondary']}>Seleciona una foto</span>
+                <div className={dropdragstyles['image-handler']+' '+dropdragstyles['image-handler--secondary']+' '+style['image-handler']}>
+                    <div className={dropdragstyles['image-handler__help-text--secondary']+' '+style['image-handler__help-text--secondary']}>
+                        <span className={dropdragstyles['image-handler__help-text--secondary']+' '+style['image-handler__help-text--secondary']}>Seleciona una foto</span>
                         <input type='file' name="extraPicture" id="extraPicture" onChange={onSelectFile}/>
                     </div>
                 </div>

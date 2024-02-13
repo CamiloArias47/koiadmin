@@ -1,0 +1,11 @@
+.secondary-pictures{
+    width: 100%;
+    padding-top: 6px;
+}
+.image-handler{
+    width: 99% !important;
+}
+.image-handler__help-text--secondary{
+    position: relative;
+    justify-content: center;
+}

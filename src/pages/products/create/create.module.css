@@ -55,9 +55,8 @@
     padding: 14px 0px;
 }
 .extra-picture__add-btn{
-    width: 85px;
-    height: 85px;
-    padding: 0;
+    width: 100%;
+    margin-top: 6px;
 }
 .description{
     height: 250px;
