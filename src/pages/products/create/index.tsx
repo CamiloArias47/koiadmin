@@ -136,6 +136,7 @@ export default function CreateProduct (): JSX.Element {
   const quitExtraImg = (pos: number) => {
     currentCropExtaImgs.current = currentCropExtaImgs.current - 1
     const newPrevElem = imgsPreviewRef.filter(prev => prev.pos !== pos)
+    console.log({newPrevElem}) // i think that this array is bad filtered
     setImgsPreviewRef([...newPrevElem])
     const refToQuit = imagesPreviewRef.splice(pos,1)[0]
     imagesPreviewRef.push(refToQuit)
