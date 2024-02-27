@@ -110,7 +110,7 @@ export default function CreateProduct (): JSX.Element {
       </div>
     </div>
   )
-
+  console.log({imgsPreviewRef})
   const preview = (
     <Card className={classPreviewDevice}>
       <div className={style.preview}>
@@ -131,12 +131,11 @@ export default function CreateProduct (): JSX.Element {
     cropExtraImg.current = cropExtraImg.current + 1
     currentCropExtaImgs.current = currentCropExtaImgs.current + 1
     if(currentCropExtaImgs.current === 5) setQuitAddMorePics(true)
-  },[cropExtraImg.current])
+  },[cropExtraImg.current, imgsPreviewRef])
 
   const quitExtraImg = (pos: number) => {
     currentCropExtaImgs.current = currentCropExtaImgs.current - 1
     const newPrevElem = imgsPreviewRef.filter(prev => prev.pos !== pos)
-    console.log({newPrevElem}) // i think that this array is bad filtered
     setImgsPreviewRef([...newPrevElem])
     const refToQuit = imagesPreviewRef.splice(pos,1)[0]
     imagesPreviewRef.push(refToQuit)
@@ -183,7 +182,6 @@ export default function CreateProduct (): JSX.Element {
   const createProduct = (e): void => {
     e.preventDefault()
     const fields = Object.fromEntries(new window.FormData(e.target))
-    console.log([fields])
     const colors : {name:string, amount:number, color:string}[] = []
     for(const productIndex in fields){
       const colorAmount = productIndex.indexOf('colorAmount')
