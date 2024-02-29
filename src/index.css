@@ -84,6 +84,9 @@ button:focus-visible,
 .no-scroll{
   overflow: hidden;
 }
+.mb-l{
+  margin-bottom: 12px;
+}
 
 @media (prefers-color-scheme: dark) {
   :root {

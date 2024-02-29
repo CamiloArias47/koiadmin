@@ -213,20 +213,23 @@ export default function CreateProduct (): JSX.Element {
   }
 
   const cropImgHandler = imgSrc === src
-    ? <div className={dropdragstyles['image-handler']}>
+    ? <div className={dropdragstyles['image-handler']+' mb-l'}>
           <div className={dropdragstyles['image-handler__help-text']}>
             <span className={dropdragstyles['image-handler__help-text--title']}>Imagen principal</span>
             <span>Selecciona o arrastra una imagen</span>
           </div>
           <input type='file' name="mainpic" id="mainpic" onChange={onSelectFile}/>
         </div>
-    : <ImageCrop 
-        src={imgSrc} 
-        quitImg={deleteImage} 
-        cropPreview={imagePreviewRef} 
-        setCompletedCrop={setCompletedCrop}
-        completedCrop={completedCrop}
-      />
+    : <div className='mb-l'>
+        <span className={stylesInputs.input__label}>Imagen Principal</span>
+        <ImageCrop 
+          src={imgSrc} 
+          quitImg={deleteImage} 
+          cropPreview={imagePreviewRef} 
+          setCompletedCrop={setCompletedCrop}
+          completedCrop={completedCrop}
+        />
+      </div>
 
   const form = (
     <Card>
@@ -244,6 +247,7 @@ export default function CreateProduct (): JSX.Element {
           cropImgHandler
         }
         <div className={style['extra-pictures']}>
+          <span className={stylesInputs.input__label}>Imagenes adicionales</span>
           {
             imgsPreviewRef?.map(previeRef => <AddImage 
               key={previeRef.pos} 
