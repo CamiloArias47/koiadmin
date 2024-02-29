@@ -7,10 +7,16 @@ interface Kolors {
   element: JSX.Element
 }
 
+export interface colorPreview {
+  name: string,
+  color: string
+}
+
 export default function ColorsForm(){
 
   const [colors, setColors] = useState([<div key={'root-index'}></div>])
   const kolors = useRef<Kolors[]| []>([])
+  const [colorsPreview, setColorsPreview] = useState<colorPreview[]>([])
 
   const addColor = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
@@ -21,7 +27,7 @@ export default function ColorsForm(){
       ...kolors.current, 
       {
         id:colorIndex, 
-        element: <Color index={colorIndex} key={colorIndex} del={delColor} /> 
+        element: <Color index={colorIndex} key={colorIndex} del={delColor} addColorPreview={addColorPreview}/> 
       }
     ]
 
@@ -35,6 +41,12 @@ export default function ColorsForm(){
     kolors.current = newColors
     const colorElements = newColors.map(color => color.element)
     setColors([...colorElements])
+  }
+
+  const addColorPreview = (posColor:number, newColor:colorPreview) => {
+    const colorsPreviewCopy = colorsPreview
+    colorsPreviewCopy[posColor] = newColor
+    setColorsPreview(colorsPreviewCopy)
   }
 
   return(

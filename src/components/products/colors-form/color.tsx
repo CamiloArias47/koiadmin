@@ -1,11 +1,31 @@
+import { useState } from 'react'
 import { InputField } from '../../form-inputs'
 import style from './colorform.module.css'
+import {colorPreview} from './index'
 
-export default function Color({ index,del }: {index:number, del:(i:number)=>void}): JSX.Element {
+interface colorComponent {
+    index: number,
+    del: (i:number)=>void,
+    addColorPreview: (posColor:number, newColor:colorPreview)=>void
+}
+
+export default function Color({ index,del, addColorPreview }: colorComponent): JSX.Element {
+
+    //this should not be states, better use references
+    const [name, setName] = useState()
+    const [amount, setAmount] = useState()
+    const [color, setColor] = useState()
 
     const deleteColor = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         del(index)
+    }
+
+    const handlerChange = (e) => {
+        const name = e.target.name 
+        if(name === 'colorName['+index+']'){
+            //se
+        }
     }
 
     return(
