@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef } from 'react'
 import { InputField } from '../../form-inputs'
 import style from './colorform.module.css'
 import {colorPreview} from './index'
@@ -11,20 +11,23 @@ interface colorComponent {
 
 export default function Color({ index,del, addColorPreview }: colorComponent): JSX.Element {
 
-    //this should not be states, better use references
-    const [name, setName] = useState()
-    const [amount, setAmount] = useState()
-    const [color, setColor] = useState()
+    const colorName = useRef("")
+    const amount = useRef("")
+    const color = useRef("")
 
     const deleteColor = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         del(index)
     }
 
-    const handlerChange = (e) => {
-        const name = e.target.name 
-        if(name === 'colorName['+index+']'){
-            //se
+    const handlerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const {name, value } = e.target 
+        if(name === 'colorName['+index+']') colorName.current = value
+        if(name === 'colorAmount['+index+']') amount.current = value
+        if(name === 'colors['+index+']') color.current = value
+        console.log('aca')
+        if(colorName.current !== "" && amount.current !== "" && color.current !== ""){
+            addColorPreview(index,{name:colorName.current, color: color.current})
         }
     }
 
@@ -35,11 +38,38 @@ export default function Color({ index,del, addColorPreview }: colorComponent): J
                 <button className={style['colors__delete']} onClick={deleteColor}>X</button>
             </div>
             <div className={style['colors__inputs']}>
-                <InputField id="colorName" name={'colorName['+index+']'} type='text' titlename='Nombre' required/>
-                <InputField id="colorAmount" name={'colorAmount['+index+']'} type='number' titlename='Cantidad' required/>
+                <InputField 
+                    id="colorName" 
+                    name={'colorName['+index+']'} 
+                    type='text' 
+                    titlename='Nombre'
+                    onChange={handlerChange} 
+                    required
+                />
+                <InputField 
+                    id="colorAmount" 
+                    name={'colorAmount['+index+']'} 
+                    type='number' 
+                    titlename='Cantidad'
+                    onChange={handlerChange} 
+                    required
+                />
                 <div className={style.colors__input}>
-                    <label htmlFor='colors' className={style.colors__label}>Color</label>
-                    <input id="colors"  name={'colors['+index+']'} className={style.colors__inputcolor} type='color' placeholder='Colores' required/>
+                    <label 
+                        htmlFor='colors' 
+                        className={style.colors__label}
+                    >
+                        Color
+                    </label>
+                    <input 
+                        id="colors"  
+                        name={'colors['+index+']'} 
+                        className={style.colors__inputcolor} 
+                        type='color' 
+                        placeholder='Colores'
+                        onChange={handlerChange} 
+                        required
+                    />
                     <span className={style.colors__inputerrors}></span>
                 </div>
             </div>

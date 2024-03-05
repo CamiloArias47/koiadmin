@@ -6,6 +6,7 @@ import { formatPrice } from '../../utils'
 import { type PixelCrop } from 'react-image-crop'
 import styles from './previewstyles.module.css'
 import { canvasPreview } from '../product-preview/ImagePreview'
+import {colorPreview} from '../products/colors-form'
 
 interface productViewType {
   desktop?: boolean
@@ -13,7 +14,7 @@ interface productViewType {
   pictures?: string[]
   price?: number | bigint
   descriptionHtml?: { __html: string | TrustedHTML } | undefined
-  colors?: [{ color: string, name: string }]
+  colors?: colorPreview[]
   imagePreviewRef: React.RefObject<HTMLCanvasElement>
   completedCrop: PixelCrop | undefined
   imagesPreviewRef?: canvasPreview[]

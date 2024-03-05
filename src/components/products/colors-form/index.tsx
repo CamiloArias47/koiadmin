@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import Color from './color' 
 import style from './colorform.module.css'
 
@@ -12,11 +12,19 @@ export interface colorPreview {
   color: string
 }
 
-export default function ColorsForm(){
+interface colorForm {
+  setColorsPreview: (colors: colorPreview[]) => void
+}
+
+export default function ColorsForm({setColorsPreview}:colorForm){
 
   const [colors, setColors] = useState([<div key={'root-index'}></div>])
   const kolors = useRef<Kolors[]| []>([])
-  const [colorsPreview, setColorsPreview] = useState<colorPreview[]>([])
+  const [previewColors, setPreviewColors] = useState<colorPreview[]>([])
+
+  useEffect(() => {
+    setColorsPreview(previewColors)
+  },[previewColors])
 
   const addColor = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
@@ -44,9 +52,9 @@ export default function ColorsForm(){
   }
 
   const addColorPreview = (posColor:number, newColor:colorPreview) => {
-    const colorsPreviewCopy = colorsPreview
+    const colorsPreviewCopy = previewColors
     colorsPreviewCopy[posColor] = newColor
-    setColorsPreview(colorsPreviewCopy)
+    setPreviewColors(colorsPreviewCopy)
   }
 
   return(
