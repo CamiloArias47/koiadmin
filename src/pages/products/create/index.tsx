@@ -20,7 +20,6 @@ import 'quill/dist/quill.snow.css';
 import style from './create.module.css'
 import stylesInputs from '../../../components/form-inputs/inputfield.module.css'
 import dropdragstyles from './dropanddrag.module.css'
-import {colorPreview} from '../../../components/products/colors-form'
 import './quill-dark-theme.css'
 
 export default function CreateProduct (): JSX.Element {
@@ -64,8 +63,6 @@ export default function CreateProduct (): JSX.Element {
     imagePreviewRef4,
     imagePreviewRef5
   ]
-  const [colorsPreview, setColorsPreview] = useState<colorPreview[]>()
-
 
   useEffect(() => {
     const getCategories = async (): Promise<void> => {
@@ -96,10 +93,6 @@ export default function CreateProduct (): JSX.Element {
     getAllCategories()
   }, [allcategories])
 
-  const setColorPreview = (colors: colorPreview[]) => {
-    setColorsPreview(colors)
-  }
-
   const header = (
     <div className={style.header}>
       <h1>Crear Producto</h1>
@@ -125,7 +118,6 @@ export default function CreateProduct (): JSX.Element {
           imagePreviewRef={imagePreviewRef} 
           imagesPreviewRef={imgsPreviewRef}
           completedCrop={completedCrop}
-          colors={colorsPreview}
         />
       </div>
     </Card>
@@ -282,7 +274,7 @@ export default function CreateProduct (): JSX.Element {
         </label>
         <div id="description" className={style.description}></div>
 
-        <ColorsForm setColorsPreview={setColorPreview}/>
+        <ColorsForm />
 
         <button type='submit' className={style['create-product-btn']} >Crear</button>
       </form>

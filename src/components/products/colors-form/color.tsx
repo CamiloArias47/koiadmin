@@ -25,7 +25,6 @@ export default function Color({ index,del, addColorPreview }: colorComponent): J
         if(name === 'colorName['+index+']') colorName.current = value
         if(name === 'colorAmount['+index+']') amount.current = value
         if(name === 'colors['+index+']') color.current = value
-        console.log('aca')
         if(colorName.current !== "" && amount.current !== "" && color.current !== ""){
             addColorPreview(index,{name:colorName.current, color: color.current})
         }

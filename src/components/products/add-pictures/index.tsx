@@ -47,7 +47,12 @@ export default function AddImage({previewRef, posPreview, quit}: AddImage){
                             <span className={dropdragstyles['image-handler__help-text--secondary']+' '+style['image-handler__help-text--secondary']}>
                                 { imgSelected ? 'Cambiar foto' : 'Seleciona o arrastra una foto' }
                              </span>
-                            <input type='file' name="extraPicture" onChange={onSelectFile}/>
+                            <input 
+                                type='file' 
+                                name="extraPicture" 
+                                onChange={onSelectFile}
+                                accept=".jpg, .jpeg, .png, .gif, .webp"
+                            />
                         </div>
                     </div>
                     <button className={style['secondary-picture__close']+' '+btnStyles['cancel-btn']} onClick={()=>{quit(posPreview)}}>Quitar 🗑️</button>

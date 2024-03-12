@@ -244,6 +244,17 @@
     cursor: pointer;
     border: 2px solid transparent;
     background-color: transparent;
+    color: black;
+    font-weight: 100;
+    font-size: small;
+    outline: transparent;
+}
+.product-colors:focus,
+.product-colors:focus-visible,
+.product-colors:hover{
+    border: 2px solid transparent;
+    outline: transparent;
+    background-color: transparent;
 }
 .product-colors--active{
     border:2px solid #cf9696;

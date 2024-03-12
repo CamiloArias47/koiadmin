@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import Color from './color' 
 import style from './colorform.module.css'
+import useCreateProduct from '../../../store/useCreateProduct'
 
 interface Kolors {
   id: number,
@@ -12,19 +13,13 @@ export interface colorPreview {
   color: string
 }
 
-interface colorForm {
-  setColorsPreview: (colors: colorPreview[]) => void
-}
+export default function ColorsForm(){
 
-export default function ColorsForm({setColorsPreview}:colorForm){
+  const [colors] = useCreateProduct(state => [state.colors])
+  const [updateColors] = useCreateProduct(state => [state.updateColors])
 
-  const [colors, setColors] = useState([<div key={'root-index'}></div>])
+  const [colorsElem, setColorsElem] = useState([<div key={'root-index'}></div>])
   const kolors = useRef<Kolors[]| []>([])
-  const [previewColors, setPreviewColors] = useState<colorPreview[]>([])
-
-  useEffect(() => {
-    setColorsPreview(previewColors)
-  },[previewColors])
 
   const addColor = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
@@ -41,25 +36,25 @@ export default function ColorsForm({setColorsPreview}:colorForm){
 
     const colorElements = kolors.current.map(color => color.element)
 
-    setColors([...colorElements])
+    setColorsElem([...colorElements])
   }
 
   const delColor = (posBtn:number) => {
     const newColors = kolors.current.filter(color => color.id !== posBtn)
     kolors.current = newColors
     const colorElements = newColors.map(color => color.element)
-    setColors([...colorElements])
+    setColorsElem([...colorElements])
   }
 
   const addColorPreview = (posColor:number, newColor:colorPreview) => {
-    const colorsPreviewCopy = previewColors
+    const colorsPreviewCopy = colors
     colorsPreviewCopy[posColor] = newColor
-    setPreviewColors(colorsPreviewCopy)
+    updateColors(colorsPreviewCopy)
   }
 
   return(
       <div className={style['colors-warpper']}>
-        { colors }
+        { colorsElem }
         <button 
           className={style['colors__add-btn']}
           onClick={addColor}
