@@ -34,7 +34,7 @@ export default function AddCategory (): JSX.Element {
     width: 250,
     height: 250
   })
-  const { totalProgress, loadImage } = useUploadImg()
+  const { totalProgress, loadImage, createCrop } = useUploadImg()
   const updateCategories = useStore(state => state.updateCategories)
   const updateshowSideModal = useUserInterfaceStore(state => state.updateshowSideModal)
 
@@ -68,26 +68,6 @@ export default function AddCategory (): JSX.Element {
       })
       reader.readAsDataURL(e.target.files[0])
     }
-  }
-
-  const createCrop = (imgName: string, cb: (file: File) => void): void => {
-    if (previewCanvasRef.current == null) {
-      throw new Error('Crop canvas does not exist')
-    }
-
-    previewCanvasRef.current.toBlob((blob) => {
-      if (blob == null) {
-        throw new Error('Failed to create blob')
-      }
-      if (blobUrlRef.current.length > 0) {
-        URL.revokeObjectURL(blobUrlRef.current)
-      }
-
-      blobUrlRef.current = URL.createObjectURL(blob)
-
-      const cropedFile = new File([blob], imgName + '.jpeg', { type: 'image/jpeg' })
-      cb(cropedFile)
-    })
   }
 
   const validateForm = (formData: FormData): boolean => {
@@ -124,7 +104,7 @@ export default function AddCategory (): JSX.Element {
     let subcategories = subCategories.current
     subcategories = subcategories.map(subcategory => subcategory.trim().replaceAll(' ', '-'))
 
-    createCrop(categoryName, (file) => {
+    createCrop(categoryName, previewCanvasRef, (file) => {
       setShowModal(true)
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       loadImage(file, 'categories/', async (photo: string): Promise<void> => {

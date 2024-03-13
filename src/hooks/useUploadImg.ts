@@ -1,14 +1,16 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import storage from '../services/firebase-storage'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 
 interface useUploadImgType {
   totalProgress: string
   loadImage: (file: File, storageFolder: string, onImageUploaded: (downloadURL: string) => void) => void
+  createCrop: (imgName: string, previewCanvasRef: React.RefObject<HTMLCanvasElement>, cb: (file: File) => void) => void
 }
 
 export default function useUploadImg (): useUploadImgType {
   const [totalProgress, setTotalProgress] = useState('0')
+  const blobUrlRef = useRef('')
 
   const loadImage = (file: File, storageFolder: string, onImageUploaded: (downloadURL: string) => void): void => {
     const metadata = {
@@ -46,5 +48,25 @@ export default function useUploadImg (): useUploadImgType {
     )
   }
 
-  return { totalProgress, loadImage }
+  const createCrop = (imgName: string, previewCanvasRef: React.RefObject<HTMLCanvasElement>, cb: (file: File) => void): void => {
+    if (previewCanvasRef.current == null) {
+      throw new Error('Crop canvas does not exist')
+    }
+
+    previewCanvasRef.current.toBlob((blob) => {
+      if (blob == null) {
+        throw new Error('Failed to create blob')
+      }
+      if (blobUrlRef.current.length > 0) {
+        URL.revokeObjectURL(blobUrlRef.current)
+      }
+
+      blobUrlRef.current = URL.createObjectURL(blob)
+
+      const cropedFile = new File([blob], imgName + '.jpeg', { type: 'image/jpeg' })
+      cb(cropedFile)
+    })
+  }
+
+  return { totalProgress, loadImage, createCrop }
 }

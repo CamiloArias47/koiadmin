@@ -13,6 +13,7 @@ import AddImage from '../../../components/products/add-pictures'
 import { canvasPreview } from '../../../components/product-preview/ImagePreview'
 import { AddIcon } from '../../../icons'
 import { saveProduct } from '../../../services/firestore/products'
+import useUploadImg from '../../../hooks/useUploadImg'
 import useReadFile from '../../../hooks/useReadFile'
 import ImageCrop from '../../../components/image-crop'
 import src from '../../../assets/imgs/no-pic.jpeg'
@@ -24,6 +25,7 @@ import './quill-dark-theme.css'
 
 export default function CreateProduct (): JSX.Element {
   const emptySubCats = [{ value: '', name: '' }]
+  const { totalProgress, loadImage, createCrop } = useUploadImg()
   const [allcategories, updateCategories] = useStore(state => [state.categories, state.updateCategories])
   const [updatemodalSideView, updateshowSideModal] = useUserInterfaceStore(state => [state.updatemodalSideView, state.updateshowSideModal])
   const [
@@ -208,7 +210,15 @@ export default function CreateProduct (): JSX.Element {
 
     fields.colors = colors
     console.log({fields})
-    //saveProduct()
+
+    createCrop('main-image', imagePreviewRef, (file) => {
+      //setShowModal(true)
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      loadImage(file, 'products/', async (photo: string): Promise<void> => {
+        console.log('uploaded')
+        //saveProduct()
+      })
+    })
   }
 
   const cropImgHandler = imgSrc === src
