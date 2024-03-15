@@ -13,6 +13,8 @@ import AddImage from '../../../components/products/add-pictures'
 import { canvasPreview } from '../../../components/product-preview/ImagePreview'
 import { AddIcon } from '../../../icons'
 import { saveProduct } from '../../../services/firestore/products'
+import type ProductModelType from '../../../services/firestore/products/product-model'
+import {type Color} from '../../../services/firestore/products/product-model'
 import useUploadImg from '../../../hooks/useUploadImg'
 import useReadFile from '../../../hooks/useReadFile'
 import ImageCrop from '../../../components/image-crop'
@@ -180,10 +182,10 @@ export default function CreateProduct (): JSX.Element {
     quitImage(() => setCompletedCrop(undefined))
   }
 
-  const createProduct = (e): void => {
+  const createProduct = async (e): void => {
     e.preventDefault()
-    const fields = Object.fromEntries(new window.FormData(e.target))
-    const colors : {name:string, amount:number, color:string}[] = []
+    const fields = Object.fromEntries(new window.FormData(e.target)) as unknown as ProductModelType
+    const colors : Color[] = []
     for(const productIndex in fields){
       const colorAmount = productIndex.indexOf('colorAmount')
       const colorName = productIndex.indexOf('colorName')
@@ -209,16 +211,41 @@ export default function CreateProduct (): JSX.Element {
     }
 
     fields.colors = colors
-    console.log({fields})
+    
+    const pictureNames = fields.name.replaceAll(' ','-')
+    
+    const mainImage = await createCrop(pictureNames, imagePreviewRef)
+    if(mainImage){
+      const mainImageUrl = await loadImage(mainImage, 'products/')
+      fields.photo = mainImageUrl ? mainImageUrl : ''
 
-    createCrop('main-image', imagePreviewRef, (file) => {
-      //setShowModal(true)
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      loadImage(file, 'products/', async (photo: string): Promise<void> => {
-        console.log('uploaded')
-        //saveProduct()
-      })
+      if(currentCropExtaImgs.current > 0){
+        const picsRoutes = await saveAxtraFields(pictureNames)
+        if(picsRoutes && picsRoutes.length >0) fields.pictures = picsRoutes
+      }
+    }
+    saveProduct(fields)
+  }
+
+  const saveAxtraFields = async (pictureNames: string) => {
+    const files = imagesPreviewRef.map((cropRef, index) => {
+      let fileGenerated 
+      const prefixName = index+1
+      const fileName = pictureNames+'-'+prefixName
+      if(cropRef.current) fileGenerated = createCrop(fileName,cropRef)
+      if(fileGenerated) return fileGenerated
     })
+
+    const filesImgs = await Promise.all(files)
+
+    const uploads = filesImgs.map(file => {
+      if(file) return loadImage(file, 'products/')
+    })
+
+    const routes  = await Promise.all(uploads)
+
+    const cleanRoutes = routes.filter(route => typeof route === 'string')
+    return cleanRoutes
   }
 
   const cropImgHandler = imgSrc === src

@@ -61,7 +61,6 @@ export default function AddCategory (): JSX.Element {
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files != null && e.target.files.length > 0) {
-      console.log({ value: e.target.value, target: e.target, file: e.target.files[0] })
       const reader = new FileReader()
       reader.addEventListener('load', () => {
         setImgSrc(reader.result?.toString() ?? '')
@@ -88,7 +87,7 @@ export default function AddCategory (): JSX.Element {
     return validForm
   }
 
-  const handlerSubmit = (e: FormEvent<HTMLFormElement>): void => {
+  const handlerSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault()
     const form = e.currentTarget
     const categoryData = new FormData(form)
@@ -104,29 +103,29 @@ export default function AddCategory (): JSX.Element {
     let subcategories = subCategories.current
     subcategories = subcategories.map(subcategory => subcategory.trim().replaceAll(' ', '-'))
 
-    createCrop(categoryName, previewCanvasRef, (file) => {
-      setShowModal(true)
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      loadImage(file, 'categories/', async (photo: string): Promise<void> => {
-        saveCategory({
-          id: categoryId,
-          name: categoryName,
-          photo,
-          subcategories
-        })
-          .then(() => {
-            void updateCategories()
-            setCategoryCreated(true)
-            form.reset()
-            setTimeout(() => {
-              updateshowSideModal(false)
-            }, 3000)
-          })
-          .catch(err => {
-            console.log({ err })
-          })
-      })
+    setShowModal(true)
+    let photo 
+    const file = await createCrop(categoryName, previewCanvasRef)
+    if(file) photo = loadImage(file, 'categories/')
+    photo = typeof photo === 'string' ? photo : ''
+      
+    saveCategory({
+      id: categoryId,
+      name: categoryName,
+      photo,
+      subcategories
     })
+      .then(() => {
+        void updateCategories()
+        setCategoryCreated(true)
+        form.reset()
+        setTimeout(() => {
+          updateshowSideModal(false)
+        }, 3000)
+      })
+      .catch(err => {
+        console.log({ err })
+      })
   }
 
   const getTopics = (topics: string[]): void => {
