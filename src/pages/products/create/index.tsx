@@ -210,7 +210,14 @@ export default function CreateProduct (): JSX.Element {
       }
     }
 
-    fields.colors = colors
+    const stringColors = colors.map(color => JSON.stringify(color))
+
+    fields.colors = stringColors
+
+    const descriptionBox = document.querySelector('#description .ql-editor')
+    const text = descriptionBox?.innerHTML ?? ''
+
+    fields.description = text
     
     const pictureNames = fields.name.replaceAll(' ','-')
     
@@ -300,8 +307,8 @@ export default function CreateProduct (): JSX.Element {
         </div>
 
 
-        <InputField id="price" name='price' type='number' titlename='Precio unitario' min="0" required/>
-        <InputField id="saleprice" name='saleprice' type='number' titlename='Precio de venta' onChange={handlerInputChange} min="0" required/>
+        <InputField id="cost" name='cost' type='number' titlename='Precio unitario' min="0" required/>
+        <InputField id="price" name='price' type='number' titlename='Precio de venta' onChange={handlerInputChange} min="0" required/>
         <InputField id="amount" name='amount' type='number' titlename='Cantidad' required/>
         <InputField id="expire" name='expire' type='date' titlename='Fecha de vencimiento'/>
         <label

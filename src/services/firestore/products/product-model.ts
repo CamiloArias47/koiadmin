@@ -9,12 +9,12 @@ export default interface ProductModelType {
   amount: number
   category: string
   subcategory: string
-  description: string
+  description: string | { __html: string; }
   name: string
   photo: string
   price: number
   cost: number
-  colors?: Color[]
+  colors?: string[]
   pictures?: (string | undefined | null)[]
   expire?: string
   timestamp: FieldValue
