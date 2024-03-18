@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { type PixelCrop } from 'react-image-crop'
 import useStore from '../../../store/useStore'
 import useCreateProduct from '../../../store/useCreateProduct'
@@ -11,6 +12,8 @@ import ProductPreview from '../../../components/product-preview'
 import ColorsForm from '../../../components/products/colors-form'
 import AddImage from '../../../components/products/add-pictures'
 import { canvasPreview } from '../../../components/product-preview/ImagePreview'
+import Modal from '../../../components/modal'
+import ProgressBar from '../../../components/progress-bar'
 import { AddIcon } from '../../../icons'
 import { saveProduct } from '../../../services/firestore/products'
 import type ProductModelType from '../../../services/firestore/products/product-model'
@@ -44,6 +47,7 @@ export default function CreateProduct (): JSX.Element {
     state.updateDescription
   ])
 
+  const [showModal, setShowModal] = useState(false)
   const [desktopView, setDesktopView] = useState(false)
   const [catOptions, setCatOptions] = useState<Array<{ value: string | undefined, name: string | undefined }>>([{ value: '', name: 'Cargando...' }])
   const [subCatOptions, setSubCatOptions] = useState<Array<{ value: string | undefined, name: string | undefined }>>(emptySubCats)
@@ -172,7 +176,7 @@ export default function CreateProduct (): JSX.Element {
     const input = e.target.name
     const value = e.target.value
     if (input === 'name') updateName(value)
-    if (input === 'saleprice') {
+    if (input === 'price') {
       const salePrice = value !== '' ? parseInt(value) : 0
       updateSalePrice(salePrice)
     }
@@ -184,6 +188,7 @@ export default function CreateProduct (): JSX.Element {
 
   const createProduct = async (e): void => {
     e.preventDefault()
+    setShowModal(true)
     const fields = Object.fromEntries(new window.FormData(e.target)) as unknown as ProductModelType
     const colors : Color[] = []
     for(const productIndex in fields){
@@ -326,10 +331,26 @@ export default function CreateProduct (): JSX.Element {
   )
 
   return (
-    <PageLayout
-      header={header}
-      body={preview}
-      aux={form}
-    />
+    <>
+      <PageLayout
+        header={header}
+        body={preview}
+        aux={form}
+      />
+      {
+        createPortal(
+            <Modal
+              title="Crear Producto"
+              show={showModal}
+              onCloseModal={ () => { setShowModal(false) } }
+            >
+              <div>
+                <ProgressBar progress={ totalProgress }/>
+              </div>
+            </Modal>,
+            document.body
+          )
+      }
+    </>
   )
 }

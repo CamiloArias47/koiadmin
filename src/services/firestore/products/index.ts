@@ -32,7 +32,8 @@ export const saveProduct = async (product: ProductModelType): Promise<string> =>
   if(product.pictures) newProduct['pictures'] = product.pictures
   if(product.expire) newProduct['expire'] = product.expire
    
-  const prductRef = await addDoc(collection(db, PRODUCTS_COLECCTION), newProduct);
+  //const prductRef = await addDoc(collection(db, PRODUCTS_COLECCTION), newProduct);
+  const prductRef = await {id:'guardado-care'}
 
   return prductRef.id
 }
