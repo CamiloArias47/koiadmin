@@ -1,18 +1,21 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, DOMElement, ReactElement, JSXElementConstructor } from 'react'
 import storage from '../services/firebase-storage'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import React from 'react'
 
 interface useUploadImgType {
   totalProgress: string
-  loadImage: (file: File, storageFolder: string) => Promise<string|undefined|null>
-  createCrop: (imgName: string, previewCanvasRef: React.RefObject<HTMLCanvasElement>) => Promise<File|null|undefined>
+  imageToUpload: string | undefined
+  loadImage: (file: File, imgUrl: string, storageFolder: string) => Promise<string|undefined|null>
+  createCrop: (imgName: string, previewCanvasRef: React.RefObject<HTMLCanvasElement>) => Promise<{file:File|null|undefined, dataURL:string}| null>
 }
 
 export default function useUploadImg (): useUploadImgType {
   const [totalProgress, setTotalProgress] = useState('0')
+  const [imageToUpload, setImageToUpload] = useState<string>()
   const blobUrlRef = useRef('')
 
-  const loadImage = async (file: File, storageFolder: string): Promise<string|undefined|null> => {
+  const loadImage = async (file: File, imgUrl: string, storageFolder: string): Promise<string|undefined|null> => {
     const metadata = {
       contentType: 'image/jpeg',
       type: file.type
@@ -22,6 +25,7 @@ export default function useUploadImg (): useUploadImgType {
     const uploadTask = uploadBytesResumable(storageRef, file, metadata)
 
     const downloadURL: string = await new Promise((resolve, reject) => {
+      setImageToUpload(imgUrl)
       uploadTask.on('state_changed',
         (snapshot) => {
           let progress: number | string = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
@@ -53,11 +57,13 @@ export default function useUploadImg (): useUploadImgType {
     return downloadURL
   }
 
-  const createCrop = async (imgName: string, previewCanvasRef: React.RefObject<HTMLCanvasElement>): Promise<File|null|undefined> => {
+  const createCrop = async (imgName: string, previewCanvasRef: React.RefObject<HTMLCanvasElement>): Promise<{file:File|null|undefined, dataURL:string}| null> => {
     let file : File | null | undefined
     if (previewCanvasRef.current == null) {
       return null
     }
+
+    const dataURL = previewCanvasRef.current.toDataURL("image/png")
     
     const blob : Blob | null = await new Promise((resolve, reject) => {
       previewCanvasRef?.current?.toBlob((blob) => {
@@ -76,8 +82,8 @@ export default function useUploadImg (): useUploadImgType {
       file = cropedFile
     } 
 
-    return file
+    return {file,dataURL}
   }
 
-  return { totalProgress, loadImage, createCrop }
+  return { totalProgress, imageToUpload, loadImage, createCrop }
 }

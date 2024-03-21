@@ -106,7 +106,7 @@ export default function AddCategory (): JSX.Element {
     setShowModal(true)
     let photo 
     const file = await createCrop(categoryName, previewCanvasRef)
-    if(file) photo = loadImage(file, 'categories/')
+    if(file && file.file) photo = loadImage(file.file, file.dataURL, 'categories/')
     photo = typeof photo === 'string' ? photo : ''
       
     saveCategory({

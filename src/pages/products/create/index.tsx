@@ -30,7 +30,7 @@ import './quill-dark-theme.css'
 
 export default function CreateProduct (): JSX.Element {
   const emptySubCats = [{ value: '', name: '' }]
-  const { totalProgress, loadImage, createCrop } = useUploadImg()
+  const { totalProgress, imageToUpload, loadImage, createCrop } = useUploadImg()
   const [allcategories, updateCategories] = useStore(state => [state.categories, state.updateCategories])
   const [updatemodalSideView, updateshowSideModal] = useUserInterfaceStore(state => [state.updatemodalSideView, state.updateshowSideModal])
   const [
@@ -227,8 +227,8 @@ export default function CreateProduct (): JSX.Element {
     const pictureNames = fields.name.replaceAll(' ','-')
     
     const mainImage = await createCrop(pictureNames, imagePreviewRef)
-    if(mainImage){
-      const mainImageUrl = await loadImage(mainImage, 'products/')
+    if(mainImage && mainImage.file){
+      const mainImageUrl = await loadImage(mainImage.file, mainImage.dataURL, 'products/')
       fields.photo = mainImageUrl ? mainImageUrl : ''
 
       if(currentCropExtaImgs.current > 0){
@@ -250,11 +250,13 @@ export default function CreateProduct (): JSX.Element {
 
     const filesImgs = await Promise.all(files)
 
-    const uploads = filesImgs.map(file => {
-      if(file) return loadImage(file, 'products/')
-    })
-
-    const routes  = await Promise.all(uploads)
+    const routes = []
+    for(const file of filesImgs){
+      if(file && file.file){
+        const load = await loadImage(file.file, file.dataURL, 'products/')
+        routes.push(load)
+      }
+    }
 
     const cleanRoutes = routes.filter(route => typeof route === 'string')
     return cleanRoutes
@@ -345,6 +347,9 @@ export default function CreateProduct (): JSX.Element {
               onCloseModal={ () => { setShowModal(false) } }
             >
               <div>
+                <div>
+                  <img src={ imageToUpload }  className={style['modal__upload-image']}/>
+                </div>
                 <ProgressBar progress={ totalProgress }/>
               </div>
             </Modal>,
