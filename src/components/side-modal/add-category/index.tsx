@@ -56,7 +56,7 @@ export default function AddCategory (): JSX.Element {
       }
     },
     100,
-    [completedCrop]
+    [completedCrop] as any
   )
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>): void => {

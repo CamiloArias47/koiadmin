@@ -20,7 +20,7 @@ interface Uselogin {
   loginStatus: boolean
   userLoginStatus: (logged: (res: boolean) => void) => void
   logout: () => Promise<void>
-  redirectUserLoginStatus: (logged: string, noLogged: string) => void
+  redirectUserLoginStatus: (logged?: string, noLogged?: string) => void
   login: ({ email, password }: { email: string, password: string }) => Promise<any>
 }
 
@@ -80,7 +80,7 @@ export default function useLogin (): Uselogin {
     })
   }
 
-  const redirectUserLoginStatus = (loggedRoute: string = '/', noLoggedRoute: string = '/login'): void => {
+  const redirectUserLoginStatus = (loggedRoute = '/' , noLoggedRoute = '/login'): void => {
     const navigate = useNavigate()
     useEffect(() => {
       userLoginStatus(loginStatus => {

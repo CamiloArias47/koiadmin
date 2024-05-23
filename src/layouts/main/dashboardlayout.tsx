@@ -9,7 +9,7 @@ export default function DashboardLayout () {
   const { redirectUserLoginStatus } = useLogin()
   const theme = useUserInterfaceStore(state => state.theme)
 
-  redirectUserLoginStatus(null)
+  redirectUserLoginStatus()
 
   return (
     <div className={theme}>

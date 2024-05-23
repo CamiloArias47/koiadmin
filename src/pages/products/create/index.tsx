@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { type PixelCrop } from 'react-image-crop'
 import useStore from '../../../store/useStore'
@@ -83,7 +83,7 @@ export default function CreateProduct (): JSX.Element {
       theme: 'snow'
     })
 
-    editor.on('text-change', (_, __, source: string) => {
+    editor.on('text-change', (_ : any, __: any, source: string) => {
       if (source === 'user') {
         const descriptionBox = document.querySelector('#description .ql-editor')
         const text = { __html: descriptionBox?.innerHTML ?? '' }
@@ -133,7 +133,7 @@ export default function CreateProduct (): JSX.Element {
     </Card>
   )
 
-  const addImage = useCallback((e) => {
+  const addImage = useCallback((e:React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     const newRef = imagesPreviewRef[currentCropExtaImgs.current]
     setImgsPreviewRef([...imgsPreviewRef, {pos:cropExtraImg.current, ref:newRef}])
@@ -188,10 +188,10 @@ export default function CreateProduct (): JSX.Element {
     quitImage(() => setCompletedCrop(undefined))
   }
 
-  const createProduct = async (e): void => {
+  const createProduct = async (e : React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault()
     setShowModal(true)
-    const fields = Object.fromEntries(new window.FormData(e.target)) as unknown as ProductModelType
+    const fields = Object.fromEntries(new window.FormData(e.target as HTMLFormElement)) as ProductModelType & { [key: string]: string | number }
     const colors : Color[] = []
     for(const productIndex in fields){
       const colorAmount = productIndex.indexOf('colorAmount')
@@ -240,8 +240,8 @@ export default function CreateProduct (): JSX.Element {
     }
     const id = await saveProduct(fields)
     if(id){
-      setProductCreated('ok')
-      e.target.reset()
+      setProductCreated('ok');
+      (e.target as HTMLFormElement ).reset() 
     }else{
       setProductCreated('error')
     }

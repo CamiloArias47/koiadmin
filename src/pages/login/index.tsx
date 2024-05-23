@@ -9,9 +9,9 @@ export default function Login () {
 
   redirectUserLoginStatus()
 
-  const signIn = e => {
+  const signIn = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
-    const fields = Object.fromEntries(new window.FormData(e.target))
+    const fields = Object.fromEntries(new window.FormData(e.target as HTMLFormElement)) as { email: string; password: string; }
     login(fields)
   }
 

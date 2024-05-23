@@ -47,7 +47,7 @@ export default function ImageCrop ({src, quitImg, cropPreview, completedCrop, se
         }
       },
       100,
-      [completedCrop]
+      [completedCrop] as any
     )
 
     const controls = withControls 

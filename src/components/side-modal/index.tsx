@@ -16,7 +16,7 @@ export default function SideModal () {
     state.updateshowSideModal
   ])
 
-  const openAnimation = open => {
+  const openAnimation = (open: boolean) => {
     const windowModal = document.querySelector(`.${styles['modal-window']}`)
     const modal = document.querySelector(`.${styles.modal}`)
     const showSideModalClass = styles['show-modal-window']
