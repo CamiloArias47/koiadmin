@@ -48,6 +48,7 @@ export default function useLogin (): Uselogin {
     const provider = new GoogleAuthProvider()
     signInWithPopup(auth, provider)
       .catch(e => {
+        console.log({ e })
         setLoginStatus(false)
       })
   }
