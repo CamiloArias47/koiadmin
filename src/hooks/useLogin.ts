@@ -72,7 +72,8 @@ export default function useLogin (): Uselogin {
             setLoginStatus(true)
             logged(true)
           })
-          .catch(async () => {
+          .catch(e => async () => {
+            console.log({ e })
             await logout()
             setLoginStatus(false)
             logged(false)
