@@ -28,7 +28,9 @@ export default function useLogin (): Uselogin {
   const [loginStatus, setLoginStatus] = useState(false)
 
   const isAdminUser = async (uid: string): Promise<boolean> => {
+    console.log({ uid })
     const user = await getUser(uid)
+    console.log({ user })
     if (user.admin) return true
     throw new Error('user has not access')
   }
@@ -63,6 +65,7 @@ export default function useLogin (): Uselogin {
 
   const userLoginStatus = (logged: (res: boolean) => void): void => {
     onAuthStateChanged(auth, observerUser => {
+      console.log({ observerUser })
       if (observerUser != null) {
         isAdminUser(observerUser.uid)
           .then(() => {
@@ -85,6 +88,7 @@ export default function useLogin (): Uselogin {
     const navigate = useNavigate()
     useEffect(() => {
       userLoginStatus(loginStatus => {
+        console.log({ loginStatus })
         let goToUrl = noLoggedRoute
         if (loginStatus) goToUrl = loggedRoute
         navigate(goToUrl)
