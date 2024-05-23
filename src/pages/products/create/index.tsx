@@ -14,6 +14,7 @@ import AddImage from '../../../components/products/add-pictures'
 import { canvasPreview } from '../../../components/product-preview/ImagePreview'
 import Modal from '../../../components/modal'
 import ProgressBar from '../../../components/progress-bar'
+import { SuccessAnimation } from '../../../icons'
 import { AddIcon } from '../../../icons'
 import { saveProduct } from '../../../services/firestore/products'
 import type ProductModelType from '../../../services/firestore/products/product-model'
@@ -30,7 +31,7 @@ import './quill-dark-theme.css'
 
 export default function CreateProduct (): JSX.Element {
   const emptySubCats = [{ value: '', name: '' }]
-  const { totalProgress, loadImage, createCrop } = useUploadImg()
+  const { totalProgress, imageToUpload, loadImage, createCrop } = useUploadImg()
   const [allcategories, updateCategories] = useStore(state => [state.categories, state.updateCategories])
   const [updatemodalSideView, updateshowSideModal] = useUserInterfaceStore(state => [state.updatemodalSideView, state.updateshowSideModal])
   const [
@@ -59,6 +60,7 @@ export default function CreateProduct (): JSX.Element {
   const cropExtraImg = useRef(0)
   const currentCropExtaImgs = useRef(0)
   const [quitAddMorePics, setQuitAddMorePics] = useState(false)
+  const [productCreated, setProductCreated] = useState('waiting')
   const imagePreviewRef1 = useRef<HTMLCanvasElement>(null)
   const imagePreviewRef2 = useRef<HTMLCanvasElement>(null)
   const imagePreviewRef3 = useRef<HTMLCanvasElement>(null)
@@ -227,8 +229,8 @@ export default function CreateProduct (): JSX.Element {
     const pictureNames = fields.name.replaceAll(' ','-')
     
     const mainImage = await createCrop(pictureNames, imagePreviewRef)
-    if(mainImage){
-      const mainImageUrl = await loadImage(mainImage, 'products/')
+    if(mainImage && mainImage.file){
+      const mainImageUrl = await loadImage(mainImage.file, mainImage.dataURL, 'products/')
       fields.photo = mainImageUrl ? mainImageUrl : ''
 
       if(currentCropExtaImgs.current > 0){
@@ -236,7 +238,13 @@ export default function CreateProduct (): JSX.Element {
         if(picsRoutes && picsRoutes.length >0) fields.pictures = picsRoutes
       }
     }
-    saveProduct(fields)
+    const id = await saveProduct(fields)
+    if(id){
+      setProductCreated('ok')
+      e.target.reset()
+    }else{
+      setProductCreated('error')
+    }
   }
 
   const saveAxtraFields = async (pictureNames: string) => {
@@ -250,11 +258,13 @@ export default function CreateProduct (): JSX.Element {
 
     const filesImgs = await Promise.all(files)
 
-    const uploads = filesImgs.map(file => {
-      if(file) return loadImage(file, 'products/')
-    })
-
-    const routes  = await Promise.all(uploads)
+    const routes = []
+    for(const file of filesImgs){
+      if(file && file.file){
+        const load = await loadImage(file.file, file.dataURL, 'products/')
+        routes.push(load)
+      }
+    }
 
     const cleanRoutes = routes.filter(route => typeof route === 'string')
     return cleanRoutes
@@ -330,6 +340,29 @@ export default function CreateProduct (): JSX.Element {
     </Card>
   )
 
+  let modalBody =
+    <div>
+      <div>
+        <img src={ imageToUpload }  className={style['modal__upload-image']}/>
+      </div>
+      <ProgressBar progress={ totalProgress }/>
+    </div>
+
+  if(productCreated === 'ok'){
+    modalBody = 
+      <div>
+        <SuccessAnimation />
+        <h2>¡Producto publicado!</h2>
+      </div>
+  }
+
+  if(productCreated === 'error'){
+    modalBody = 
+      <div>
+        <h2>No se ha publicado el producto</h2>
+      </div>
+  }
+
   return (
     <>
       <PageLayout
@@ -344,9 +377,7 @@ export default function CreateProduct (): JSX.Element {
               show={showModal}
               onCloseModal={ () => { setShowModal(false) } }
             >
-              <div>
-                <ProgressBar progress={ totalProgress }/>
-              </div>
+              { modalBody }
             </Modal>,
             document.body
           )
